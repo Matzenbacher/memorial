@@ -1,0 +1,198 @@
+{
+  "hero": {
+    "subtitle": "Cemitério Parque Ourinhos",
+    "headline": "Preservamos a memória de histórias que não devem ser esquecidas.",
+    "cta": "Quero contratar um serviço",
+    "ctaLink": "#contato"
+  },
+  "institutional": {
+    "title": "Um espaço diferente de tudo que você já viu",
+    "subtitle": "O Branco, as flores e os cataventos dão leveza e serenidade. Somos um jardim que respeita, acolhe e convida á paz.",
+    "cta": "Quero contratar um serviço"
+  },
+  "video": {
+    "title": "Preservar memórias que merecem ser lembradas",
+    "file": "video-institucional.mp4"
+  },
+  "services": [
+    {
+      "id": "sepultamento",
+      "title": "Sepultamento",
+      "description": "Com estrutura planejada, cuidado e serenidade.",
+      "icon": "service-sepultamento.png",
+      "link": "/servicos/sepultamento"
+    },
+    {
+      "id": "espaco-cerimonial",
+      "title": "Espaço cerimonial",
+      "description": "Ambiente acolhedor e respeitoso para homenagens.",
+      "icon": "service-sepultamento.png",
+      "link": "/servicos/espaco-cerimonial"
+    },
+    {
+      "id": "velorio",
+      "title": "Velório",
+      "description": "Comodidade, privacidade e apoio integral.",
+      "icon": "service-sepultamento.png",
+      "link": "/servicos/velorio"
+    }
+  ],
+  "highlights": [
+    {
+      "id": "plano-preventivo",
+      "title": "Plano preventivo garante economia de até 40%",
+      "icon": "💰"
+    },
+    {
+      "id": "ambiente-acolhedor",
+      "title": "Um ambiente acolhedor, planejado para transmitir tranquilidade.",
+      "icon": "🌳"
+    },
+    {
+      "id": "plantao-24h",
+      "title": "Plantão Memorial Garden disponível 24h",
+      "icon": "📞"
+    }
+  ],
+  "about": {
+    "title": "Memorial Garden é o único cemitério modelo parque da região de Ourinhos",
+    "subtitle": "Fundado em 28 de outubro de 2011, o Memorial Garden nasceu com um propósito muito claro: transformar o significado do adeus.",
+    "description": "Memorial Garden é o único cemitério modelo parque da região de Ourinhos. Nossa estrutura inclui: Capela Ecumênica para cerimônias de todas as crenças. Espaços arborizados e organizados com paisagismo. Salas climatizadas e estrutura completa para velórios e homenagens. Estacionamento interno gratuito para familiares e visitantes.",
+    "image": "about-main.webp",
+    "cta": "Conhecer mais sobre",
+    "ctaLink": "/sobre"
+  },
+  "stats": [
+    {
+      "number": "14",
+      "label": "Anos em Ourinhos",
+      "suffix": " Anos"
+    },
+    {
+      "number": "2000",
+      "label": "Famílias amparadas",
+      "prefix": "+",
+      "suffix": " Famílias"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": 1,
+      "text": "A estrutura do local e o cuidado da equipe fizeram toda a diferença nesse momento tão difícil.",
+      "author": "Felipe",
+      "relation": "Neto",
+      "rating": 5
+    }
+  ],
+  "faq": [
+    {
+      "id": 1,
+      "question": "O que é um cemitério parque e qual a diferença para os cemitérios tradicionais?",
+      "answer": "O cemitério parque Memorial Garden oferece um espaço arborizado, organizado e sem túmulos aparentes, proporcionando mais paz, beleza e acolhimento às famílias. É um ambiente planejado para homenagens mais serenas e discretas."
+    },
+    {
+      "id": 2,
+      "question": "Quais são os serviços oferecidos pela Memorial Garden?",
+      "answer": "Oferecemos sepultamento, espaço cerimonial, velório com salas climatizadas, capela ecumênica, estacionamento gratuito e atendimento 24 horas em casos de emergência."
+    },
+    {
+      "id": 3,
+      "question": "O que é o Memorial Garden?",
+      "answer": "Memorial Garden é o único cemitério modelo parque da região de Ourinhos, fundado em 2011 com o propósito de transformar o significado do adeus através de um ambiente acolhedor e respeitoso."
+    },
+    {
+      "id": 4,
+      "question": "O Memorial Garden atende quais tipos de cerimônia?",
+      "answer": "Atendemos cerimônias de todas as crenças em nossa Capela Ecumênica, respeitando as tradições e costumes de cada família."
+    },
+    {
+      "id": 5,
+      "question": "Qual é o diferencial do Memorial Garden?",
+      "answer": "Nosso diferencial está no ambiente parque arborizado, estrutura completa, atendimento humanizado e disponibilidade 24 horas para emergências."
+    },
+    {
+      "id": 6,
+      "question": "Como posso conhecer os serviços e agendar uma visita?",
+      "answer": "Entre em contato conosco pelo telefone 14 99794-3325 ou WhatsApp. Atendemos de segunda a segunda das 08:00 às 18:00, inclusive finais de semana e feriados."
+    }
+  ],
+  "contact": {
+    "title": "Precisa de ajuda? Fale com a gente.",
+    "fields": [
+      {
+        "name": "name",
+        "label": "Nome",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "email",
+        "label": "E-mail",
+        "type": "email",
+        "required": true
+      },
+      {
+        "name": "phone",
+        "label": "Telefone",
+        "type": "tel",
+        "required": true
+      },
+      {
+        "name": "message",
+        "label": "Mensagem",
+        "type": "textarea",
+        "required": false
+      }
+    ],
+    "button": "Enviar contato",
+    "successMessage": "Mensagem enviada com sucesso! Entraremos em contato em breve.",
+    "errorMessage": "Erro ao enviar mensagem. Por favor, tente novamente."
+  },
+  "footer": {
+    "address": {
+      "street": "Est. Fernando Antônio Paschoal 1.555",
+      "neighborhood": "Água do Jacu",
+      "city": "Ourinhos",
+      "state": "SP",
+      "zip": "19904-000",
+      "poBox": "Caixa Postal 128",
+      "full": "Est. Fernando Antônio Paschoal 1.555, Água do Jacu, Ourinhos, SP – CEP: 19904-000 / Caixa Postal 128"
+    },
+    "contact": {
+      "phone": "14 99794-3325",
+      "whatsapp": "14 99881-1397",
+      "instagram": "@memorial.garden",
+      "email": "contato@memorialgarden.com.br"
+    },
+    "hours": {
+      "regular": {
+        "days": "Segunda à segunda",
+        "hours": "08:00 às 18:00",
+        "description": "Inclusive finais de semana e feriados para dúvidas, visitas, recebimentos, atendimentos em geral."
+      },
+      "emergency": {
+        "title": "Plantão 24h",
+        "description": "Com plantão de vendas 24 horas e atendimento em casos de óbito."
+      }
+    },
+    "links": {
+      "quick": [
+        { "label": "Início", "url": "/" },
+        { "label": "Sobre nós", "url": "/sobre" },
+        { "label": "Serviços", "url": "/servicos" },
+        { "label": "Blog", "url": "/blog" }
+      ],
+      "services": [
+        { "label": "Velório", "url": "/servicos/velorio" },
+        { "label": "Sepultamento", "url": "/servicos/sepultamento" },
+        { "label": "Espaço cerimonial", "url": "/servicos/espaco-cerimonial" }
+      ]
+    },
+    "credits": "Desenvolvido com estratégia por Brands Social Digital"
+  },
+  "seo": {
+    "title": "Memorial Garden - Cemitério Parque em Ourinhos",
+    "description": "Memorial Garden é o único cemitério modelo parque da região de Ourinhos. Estrutura completa com capela ecumênica, espaços arborizados e atendimento 24h.",
+    "keywords": "cemitério, cemitério parque, ourinhos, memorial garden, velório, sepultamento, espaço cerimonial"
+  }
+}
