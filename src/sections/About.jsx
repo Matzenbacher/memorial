@@ -114,37 +114,31 @@ const TextContainer = styled.div`
 
 const VideoContainer = styled.div`
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 65%;
+  right: 35%;
+  padding-right: 30%;
   background-color: ${(props) => props.theme.grey};
   min-height: 100vh;
 
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  padding: 4rem 2rem;
-  
-  @media (max-width: 64em) {
-    width: 60%;
-  }
   
   @media (max-width: 48em) {
     position: relative;
-    padding: 3rem 2rem;
+    right: 0;
+    padding-right: 2rem;
     width: 100%;
     min-height: 60vh;
   }
 `;
 
 const Item = styled(motion.div)`
-  width: 100%;
-  max-width: 37rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: inline-block;
+  width: 37rem;
+  margin-left: 6rem;
+  flex-shrink: 0;
   
-  img, video {
+  video {
     width: 100%;
     height: 26rem;
     object-fit: cover;
@@ -168,9 +162,10 @@ const Item = styled(motion.div)`
   }
 
   @media (max-width: 64em) {
-    max-width: 32rem;
+    width: 32rem;
+    margin-left: 4rem;
     
-    img, video, iframe {
+    video, iframe {
       height: 22rem;
     }
     
@@ -180,9 +175,10 @@ const Item = styled(motion.div)`
   }
 
   @media (max-width: 48em) {
-    max-width: 100%;
+    width: 25rem;
+    margin-left: 3rem;
     
-    img, video, iframe {
+    video, iframe {
       height: 20rem;
     }
     
@@ -192,7 +188,10 @@ const Item = styled(motion.div)`
   }
   
   @media (max-width: 30em) {
-    img, video, iframe {
+    width: 20rem;
+    margin-left: 2rem;
+    
+    video, iframe {
       height: 16rem;
     }
     
@@ -236,40 +235,47 @@ const About = () => {
 
   useLayoutEffect(() => {
     let element = ref.current;
-    let leftElement = Horizontalref.current;
-    
-    if (!element || !leftElement) return;
-    
-    let items = leftElement.querySelectorAll('.media-item');
-    if (items.length === 0) return;
+    let scrollingElement = Horizontalref.current;
+
+    if (!element || !scrollingElement) return;
+
+    let pinWrapWidth = scrollingElement.offsetWidth;
+    let t1 = gsap.timeline();
 
     setTimeout(() => {
-      let t1 = gsap.timeline({
+      // Pin da section
+      t1.to(element, {
         scrollTrigger: {
           trigger: element,
           start: "top top",
-          end: "+=100%",
+          end: `${pinWrapWidth} bottom`,
           scroller: ".App",
-          pin: true,
-          pinSpacing: true,
           scrub: 1,
-        }
+          pin: true,
+        },
+        height: `${scrollingElement.scrollWidth}px`,
+        ease: "none",
       });
 
-      // Apenas aproximação - elementos aparecem e ficam
-      t1.fromTo(items[0], 
-        { x: -200, opacity: 0 },
-        { x: 0, opacity: 1, ease: "power2.out" }
-      );
-      
-      // Elementos ficam parados no final
-      t1.to({}, { duration: 0.5 });
+      // Move o container até centralizar o vídeo
+      t1.to(scrollingElement, {
+        scrollTrigger: {
+          trigger: scrollingElement,
+          start: "top top",
+          end: `${pinWrapWidth} bottom`,
+          scroller: ".App",
+          scrub: 1,
+        },
+        x: pinWrapWidth,
+        ease: "none",
+      });
       
       ScrollTrigger.refresh();
     }, 1000);
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      t1.kill();
+      ScrollTrigger.kill();
     };
   }, []);
 

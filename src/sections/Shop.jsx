@@ -259,7 +259,7 @@ const Shop = () => {
 
   return (
     <Section ref={ref} id="shop">
-      <Title data-scroll data-scroll-speed="-2">
+      <Title data-scroll data-scroll-speed="-0.5">
         Nosso Espaço
       </Title>
       <Left>
