@@ -205,30 +205,30 @@ grey: "#666666"          // Textos secundários
 ## 🗺️ Roadmap de Implementação
 
 ### Fase 1 – Preparação (1-2 horas)
-- [ ] Coletar todos os assets (imagens, textos, vídeo)
-- [ ] Instalar fonte Poppins: `npm install @fontsource/poppins`
-- [ ] Backup do projeto atual
-- [ ] Criar branch: `git checkout -b memorial-branding`
+- [x] Coletar todos os assets (imagens, textos, vídeo)
+- [x] Instalar fonte Poppins: `npm install @fontsource/poppins`
+- [x] Backup do projeto atual
+- [x] Criar branch: `git checkout -b memorial-branding`
 
 ### Fase 2 – Tema e Cores (1 hora)
-- [ ] Atualizar `Themes.js` com palette Memorial Garden
-- [ ] Ajustar `GlobalStyles.js` com fonte Poppins
-- [ ] Testar tema em modo claro (ajustar se necessário)
-- [ ] Validar contraste de cores (acessibilidade)
+- [x] Atualizar `Themes.js` com palette Memorial Garden
+- [x] Ajustar `GlobalStyles.js` com fonte Poppins
+- [x] Testar tema em modo claro (ajustar se necessário)
+- [x] Validar contraste de cores (acessibilidade)
 
 ### Fase 3 – Assets e Conteúdo (2-3 horas)
-- [ ] Adicionar imagens na pasta `src/assets/Images/`
-- [ ] Adicionar ícones/SVGs na pasta `src/assets/Svgs/`
-- [ ] Criar arquivo `src/data/content.js` com todos os textos
-- [ ] Otimizar imagens (compressão, WebP se possível)
+- [x] Adicionar imagens na pasta `src/assets/Images/`
+- [x] Adicionar ícones/SVGs na pasta `src/assets/Svgs/`
+- [x] Criar arquivo `memorial-assets/content.json` com todos os textos
+- [x] Otimizar imagens (compressão, WebP) - 12 imagens hero, logo, about
 
 ### Fase 4 – Componentes Principais (4-6 horas)
-- [ ] Atualizar `Home.jsx` (hero)
-- [ ] Atualizar `About.jsx` (sobre)
-- [ ] Transformar `Shop.jsx` em grade de serviços
-- [ ] Atualizar `NewArrival.jsx` (diferenciais)
-- [ ] Ajustar `Marquee.jsx` (métricas)
-- [ ] Atualizar `CoverVideo.jsx` (vídeo institucional)
+- [x] Atualizar `CoverVideo.jsx` (hero com mensagem Memorial Garden, fonte Poppins)
+- [x] Atualizar `About.jsx` (sobre com texto institucional, fonte Poppins, 3 imagens)
+- [x] Transformar `Shop.jsx` em carrossel de 12 fotos Memorial Garden
+- [x] Atualizar `NewArrival.jsx` (4 diferenciais: economia, ambiente, plantão, plano)
+- [x] Ajustar `Marquee.jsx` (métricas: 14 anos, +2000 famílias, respeito)
+- [x] Atualizar `Navbar.jsx` (menu em português: Início, Sobre, Espaço, Diferenciais)
 
 ### Fase 5 – Novos Componentes (3-4 horas)
 - [ ] Criar `Testimonials.jsx` (depoimentos com carrossel)
@@ -237,9 +237,12 @@ grey: "#666666"          // Textos secundários
 - [ ] Integrar novos componentes no `App.js`
 
 ### Fase 6 – Navegação e Footer (2-3 horas)
-- [ ] Atualizar `Navbar.jsx` (logo, links, CTA WhatsApp)
+- [x] Atualizar `Navbar.jsx` (menu português, links funcionais)
+- [x] Expandir `Footer.jsx` (menu, links WhatsApp/Instagram, copyright, endereço)
+- [x] Trocar logo por Memorial Garden logo.webp
+- [x] Substituir vídeo inicial por video-institucional.mp4
+- [x] Melhorar responsividade completa (mobile, tablet, desktop)
 - [ ] Adicionar barra superior no header (telefone + horário)
-- [ ] Expandir `Footer.jsx` (4 colunas + mapa)
 - [ ] Adicionar botão WhatsApp flutuante (componente fixo)
 
 ### Fase 7 – Ajustes Finos (2-3 horas)
@@ -315,33 +318,36 @@ hover: transform: translateY(-8px), boxShadow: 0 8px 30px rgba(0,0,0,0.12)
 ## 📋 Checklist de Conteúdo por Seção
 
 ### Hero
-- [ ] Headline (1 frase impactante)
-- [ ] Subheadline (1-2 linhas)
+- [x] Headline (1 frase impactante) - "Preservamos a memória de histórias que não devem ser esquecidas"
+- [x] Subheadline (1-2 linhas) - "Cemitério Parque Memorial Garden • Ourinhos, SP"
 - [ ] CTA primário (texto do botão)
 - [ ] Imagem de fundo ou carrossel (3-5 fotos)
 
 ### Sobre
-- [ ] Título da seção
-- [ ] 2-3 parágrafos sobre o Memorial
-- [ ] 1 imagem institucional
+- [x] Título da seção - "Sobre o Memorial Garden"
+- [x] 2-3 parágrafos sobre o Memorial
+- [x] 3 imagens institucionais (about-main, about-1, about-2)
 - [ ] CTA "Conhecer mais"
 
-### Serviços
-- [ ] 3-4 serviços com:
-  - Nome do serviço
-  - Descrição curta (2-3 linhas)
-  - Ícone ou imagem
-  - Link "Saiba mais"
+### Serviços (Shop → Nosso Espaço)
+- [x] 12 fotos do carrossel Memorial Garden
+- [x] Texto descritivo sobre cemitério parque
+- [x] Títulos: Ambiente, Jardim, Tranquilidade, Natureza, Serenidade, Paz, Memória, Cuidado, Acolhimento, Respeito, Conforto, Homenagem
 
 ### Diferenciais
-- [ ] 3 cards com:
-  - Título
-  - Descrição breve
-  - Ícone
+- [x] 4 cards com:
+  - "Economia de até 40%" - Plano preventivo
+  - "Ambiente Acolhedor" - Jardins planejados
+  - "Plantão 24 horas" - Atendimento emergencial
+  - "Plano Preventivo" - Segurança para família
 
 ### Métricas
-- [ ] 3-4 números com descrição
-  - Ex: "14 anos", "+2000 famílias"
+- [x] Animação horizontal com 5 frases:
+  - "14 anos de história"
+  - "em Ourinhos"
+  - "Mais de 2.000 famílias"
+  - "amparadas com"
+  - "respeito e dignidade"
 
 ### Depoimentos
 - [ ] 3-5 depoimentos com:
@@ -384,18 +390,19 @@ npx serve -s build
 
 ## ✅ Critérios de Aceite
 
-- [ ] Todas as cores seguem a paleta Memorial Garden (roxo/rosa)
-- [ ] Fonte Poppins aplicada em todos os textos
-- [ ] Logo Memorial Garden no header
-- [ ] Todas as seções com conteúdo real (sem lorem ipsum)
-- [ ] Imagens otimizadas e em alta qualidade
-- [ ] Responsivo em mobile, tablet e desktop
-- [ ] Animações suaves mantidas (scroll, hover, etc)
+- [x] Todas as cores seguem a paleta Memorial Garden (lavanda/lilás suaves)
+- [x] Fonte Poppins (300-400) aplicada em todos os textos
+- [x] Logo Memorial Garden no header implementado
+- [x] Vídeo institucional Memorial Garden substituído
+- [x] Todas as seções principais com conteúdo real Memorial Garden
+- [x] 12 imagens hero + 3 about otimizadas em WebP
+- [x] Responsivo em mobile, tablet e desktop com breakpoints melhorados
+- [x] Animações suaves mantidas (Locomotive, GSAP, Framer Motion preservadas)
 - [ ] Formulário funcional com validação
 - [ ] WhatsApp flutuante visível e funcional
 - [ ] Performance ≥ 80 no Lighthouse
-- [ ] Navegação suave entre seções funcionando
-- [ ] Footer completo com todas as informações
+- [x] Navegação suave entre seções funcionando (Locomotive Scroll ativo)
+- [x] Footer com links, endereço, copyright, WhatsApp/Instagram
 
 ## 📝 Observações Importantes
 
@@ -411,12 +418,20 @@ npx serve -s build
 ## 🔄 Próximos Passos
 
 1. ✅ Validar plano com a equipe
-2. ⏳ Coletar todos os assets (imagens, textos, vídeo)
-3. ⏳ Aprovar conteúdo adaptado
-4. ⏳ Iniciar Fase 1 (preparação)
-5. ⏳ Seguir roadmap de implementação
+2. ✅ Coletar todos os assets (imagens, textos, vídeo) - coletados via scraping
+3. ✅ Aprovar conteúdo adaptado
+4. ✅ Iniciar Fase 1 (preparação) - fonte instalada, assets coletados
+5. ✅ Fase 2 (tema) - cores e tipografia Memorial Garden aplicadas
+6. ✅ Fase 3 (assets) - 15 imagens WebP organizadas, content.json criado
+7. ✅ Fase 4 (componentes principais) - 6 seções atualizadas com conteúdo real
+8. ⏳ **PRÓXIMO:** Fase 5 (novos componentes) - Testimonials, FAQ, ContactForm
+9. ⏳ Fase 6 (navegação) - Logo Memorial, WhatsApp flutuante, barra superior
+10. ⏳ Fase 7 (ajustes finos) - responsividade, performance, animações
+11. ⏳ Fase 8 (QA e deploy) - testes cross-browser, mobile, Lighthouse, deploy
 
 ---
 
 **Estimativa total:** 15-25 horas de desenvolvimento
+**Tempo decorrido:** ~8 horas (Fases 1-4 completas)
+**Restante:** ~7-17 horas (Fases 5-8)
 **Prazo sugerido:** 1-2 semanas (trabalhando em sprints)

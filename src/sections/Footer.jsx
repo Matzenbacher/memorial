@@ -28,18 +28,32 @@ const LogoContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 2rem;
 
   img {
     width: 10vw;
     height: auto;
+    min-width: 80px;
+    max-width: 150px;
   }
 
   h3 {
-    font-family: "Kaushan Script";
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
     font-size: ${(props) => props.theme.fontxxl};
+    margin-top: 1rem;
+    text-align: center;
 
-    @media (max-width: 48em) {
+    @media (max-width: 64em) {
       font-size: ${(props) => props.theme.fontxl};
+    }
+    
+    @media (max-width: 48em) {
+      font-size: ${(props) => props.theme.fontlg};
+    }
+    
+    @media (max-width: 30em) {
+      font-size: ${(props) => props.theme.fontmd};
     }
   }
 `;
@@ -92,6 +106,7 @@ const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 
   a {
     text-decoration: underline;
@@ -100,13 +115,23 @@ const Bottom = styled.div`
   @media (max-width: 64em) {
     flex-direction: column;
     justify-content: center;
+    margin: 0 2rem;
+    gap: 1.5rem;
+    
     span {
       transform: none !important;
+      text-align: center;
     }
   }
 
   @media (max-width: 48em) {
     font-size: ${(props) => props.theme.fontmd};
+    margin: 0 1rem;
+  }
+  
+  @media (max-width: 30em) {
+    font-size: ${(props) => props.theme.fontsm};
+    padding: 1rem 0;
   }
 `;
 
@@ -130,12 +155,12 @@ const Footer = () => {
           width="300"
           height="300"
           src={Logo}
-          alt="Wibe"
+          alt="Memorial Garden"
           data-scroll
           data-scroll-speed="2"
         />
         <h3 data-scroll data-scroll-speed="-1">
-          Wibe Studio
+          Memorial Garden
         </h3>
       </LogoContainer>
       <FooterComponent
@@ -148,25 +173,25 @@ const Footer = () => {
       >
         <ul>
           <li aria-hidden="true" onClick={() => handleScroll("#home")}>
-            home
+            Início
           </li>
           <li aria-hidden="true" onClick={() => handleScroll(".about")}>
-            about
+            Sobre
           </li>
           <li aria-hidden="true" onClick={() => handleScroll("#shop")}>
-            shop
+            Nosso Espaço
           </li>
           <li aria-hidden="true" onClick={() => handleScroll(".new-arrival")}>
-            new arrival
+            Diferenciais
           </li>
           <li>
-            <a href="https://google.com" target={"_blank"} rel="noreferrer">
-              look book
+            <a href="https://wa.me/5514998811397" target={"_blank"} rel="noreferrer">
+              WhatsApp
             </a>
           </li>
           <li>
-            <a href="https://google.com" target={"_blank"} rel="noreferrer">
-              reviews
+            <a href="https://instagram.com/memorial.garden" target={"_blank"} rel="noreferrer">
+              Instagram
             </a>
           </li>
         </ul>
@@ -176,21 +201,14 @@ const Footer = () => {
             data-scroll-speed="2"
             data-scroll-direction="horizontal"
           >
-            &copy; 2022. All Rights Reserved.
+            &copy; 2025 Memorial Garden. Todos os direitos reservados.
           </span>
           <span
             data-scroll
             data-scroll-speed="-2"
             data-scroll-direction="horizontal"
           >
-            Made with &hearts; by{" "}
-            <a
-              href="http://devdreaming.com"
-              target={"_blank"}
-              rel="dofollow noreferrer"
-            >
-              CodeBucks
-            </a>
+            Est. Fernando Antônio Paschoal 1.555 • Ourinhos, SP
           </span>
         </Bottom>
       </FooterComponent>

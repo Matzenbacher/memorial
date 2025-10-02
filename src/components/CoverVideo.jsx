@@ -2,22 +2,30 @@ import { motion } from "framer-motion";
 import React from "react";
 import styled from "styled-components";
 
-import MainVideo from "../assets/Walking Girl.mp4";
+import MainVideo from "../assets/sky.mp4";
 
 const VideoContainer = styled.section`
   width: 100%;
   height: 100vh;
   position: relative;
+  
   video {
     width: 100%;
     height: 100vh;
     object-fit: cover;
+    object-position: center center;
 
-    @media (max-width: 48em) {
-      object-position: center 10%;
+    @media (max-width: 64em) {
+      object-position: center center;
     }
+    
+    @media (max-width: 48em) {
+      object-position: center center;
+      height: 100vh;
+    }
+    
     @media (max-width: 30em) {
-      object-position: center 50%;
+      object-position: center center;
     }
   }
 `;
@@ -29,7 +37,7 @@ const DarkOverlay = styled.div`
   right: 0;
   bottom: 0;
   z-index: 1;
-  background-color: ${(props) => `rgba(${props.theme.bodyRgba},0.6)`};
+  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const Title = styled(motion.div)`
@@ -44,7 +52,8 @@ const Title = styled(motion.div)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: ${(props) => props.theme.text};
+  color: #ffffff;
+  padding: 0 2rem;
 
   div {
     display: flex;
@@ -52,29 +61,52 @@ const Title = styled(motion.div)`
   }
 
   h1 {
-    font-family: "Kaushan Script";
-    font-size: ${(props) => props.theme.fontBig};
+    font-family: 'Poppins', sans-serif;
+    font-size: ${(props) => props.theme.fontxxxl};
+    font-weight: 400;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+    line-height: 1.3;
+    text-align: center;
+    color: #ffffff;
+    opacity: 1;
 
-    text-shadow: 1px 1px 1px ${(props) => props.theme.body};
-
+    @media (max-width: 64em) {
+      font-size: ${(props) => props.theme.fontxxl};
+    }
+    
+    @media (max-width: 48em) {
+      font-size: ${(props) => props.theme.fontxl};
+      line-height: 1.2;
+    }
+    
     @media (max-width: 30em) {
-      /* font-size: ${(props) => props.theme.fontxxxl}; */
-      font-size: calc(5rem + 8vw);
+      font-size: ${(props) => props.theme.fontlg};
+      br {
+        display: none;
+      }
     }
   }
+  
   h2 {
     font-size: ${(props) => props.theme.fontlg};
-    font-family: "Sirin Stencil";
-    font-weight: 500;
-    text-shadow: 1px 1px 1px ${(props) => props.theme.body};
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
     margin: 0 auto;
+    margin-top: 1rem;
+    text-align: center;
+    max-width: 90%;
+    color: #ffffff;
+    opacity: 1;
 
-    text-transform: capitalize;
-
-    @media (max-width: 30em) {
+    @media (max-width: 48em) {
       font-size: ${(props) => props.theme.fontmd};
-      /* font-size: calc(5rem + 8vw); */
-      margin-top: -1.5rem;
+      margin-top: 0.75rem;
+    }
+    
+    @media (max-width: 30em) {
+      font-size: ${(props) => props.theme.fontsm};
+      margin-top: 0.5rem;
     }
   }
 `;
@@ -101,48 +133,20 @@ const CoverVideo = () => {
       <DarkOverlay />
 
       <Title variants={container} initial="hidden" animate="show">
-        <div>
-          <motion.h1
-            variants={item}
-            data-scroll
-            data-scroll-delay="0.13"
-            data-scroll-speed="4"
-          >
-            W
-          </motion.h1>
-          <motion.h1
-            variants={item}
-            data-scroll
-            data-scroll-delay="0.09"
-            data-scroll-speed="4"
-          >
-            i
-          </motion.h1>
-          <motion.h1
-            variants={item}
-            data-scroll
-            data-scroll-delay="0.06"
-            data-scroll-speed="4"
-          >
-            b
-          </motion.h1>
-          <motion.h1
-            variants={item}
-            data-scroll
-            data-scroll-delay="0.04"
-            data-scroll-speed="4"
-          >
-            e
-          </motion.h1>
-        </div>
+        <motion.h1
+          variants={item}
+          data-scroll
+          data-scroll-speed="2"
+        >
+          Preservamos a memória de histórias<br/>que não devem ser esquecidas
+        </motion.h1>
         <motion.h2
-          style={{ alignSelf: "flex-end" }}
           variants={item}
           data-scroll
           data-scroll-delay="0.04"
-          data-scroll-speed="2"
+          data-scroll-speed="1"
         >
-          inspire. create. belive
+          Cemitério Parque Memorial Garden • Ourinhos SP
         </motion.h2>
       </Title>
 

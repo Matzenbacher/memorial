@@ -14,6 +14,8 @@ import img7 from "../assets/Images/7.webp";
 import img8 from "../assets/Images/8.webp";
 import img9 from "../assets/Images/9.webp";
 import img10 from "../assets/Images/10.webp";
+import img11 from "../assets/Images/11.webp";
+import img12 from "../assets/Images/12.webp";
 
 const Section = styled(motion.section)`
   min-height: 100vh;
@@ -65,34 +67,45 @@ const Left = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2rem;
 
   p {
     font-size: ${(props) => props.theme.fontlg};
     font-weight: 300;
     width: 80%;
     margin: 0 auto;
+    line-height: 1.6;
   }
 
   @media (max-width: 64em) {
+    width: 40%;
     p {
       font-size: ${(props) => props.theme.fontmd};
+      width: 90%;
     }
   }
 
   @media (max-width: 48em) {
-    width: 40%;
+    width: 100%;
+    position: relative;
+    min-height: auto;
+    padding: 3rem 2rem;
+    
     p {
       font-size: ${(props) => props.theme.fontsm};
+      width: 100%;
     }
   }
+  
   @media (max-width: 30em) {
+    padding: 2rem 1rem;
+    
     p {
       font-size: ${(props) => props.theme.fontxs};
     }
   }
 `;
 const Right = styled.div`
-  /* width: 65%; */
   position: absolute;
   left: 35%;
   padding-left: 30%;
@@ -102,27 +115,77 @@ const Right = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  
+  @media (max-width: 48em) {
+    position: relative;
+    left: 0;
+    padding-left: 2rem;
+    width: 100%;
+    overflow-x: auto;
+    min-height: 60vh;
+  }
 `;
 
 const Item = styled(motion.div)`
   display: inline-block;
   width: 20rem;
-  /* background-color: black; */
   margin-right: 6rem;
+  flex-shrink: 0;
+  
   img {
     width: 100%;
-    height: auto;
+    height: 30rem;
+    object-fit: cover;
     cursor: pointer;
+    border-radius: 8px;
   }
 
   h1 {
     font-weight: 500;
     text-align: center;
     cursor: pointer;
+    margin-top: 1rem;
+    font-size: ${(props) => props.theme.fontlg};
+  }
+
+  @media (max-width: 64em) {
+    width: 18rem;
+    margin-right: 4rem;
+    
+    img {
+      height: 27rem;
+    }
+    
+    h1 {
+      font-size: ${(props) => props.theme.fontmd};
+    }
   }
 
   @media (max-width: 48em) {
     width: 15rem;
+    margin-right: 3rem;
+    
+    img {
+      height: 22.5rem;
+    }
+    
+    h1 {
+      font-size: ${(props) => props.theme.fontsm};
+    }
+  }
+  
+  @media (max-width: 30em) {
+    width: 12rem;
+    margin-right: 2rem;
+    
+    img {
+      height: 18rem;
+    }
+    
+    h1 {
+      font-size: ${(props) => props.theme.fontxs};
+      margin-top: 0.5rem;
+    }
   }
 `;
 //data-scroll data-scroll-speed="-2" data-scroll-direction="horizontal"
@@ -196,34 +259,35 @@ const Shop = () => {
 
   return (
     <Section ref={ref} id="shop">
-      <Title data-scroll data-scroll-speed="-1">
-        New Collection
+      <Title data-scroll data-scroll-speed="-2">
+        Nosso Espaço
       </Title>
       <Left>
         <p>
-          The brand new collection is currently being developed in USA. We
-          create our products using best quality material, including the use of
-          some of the pure fabrics to make our products. All products are made
-          using the best materials, from the finest cotton to the finest
-          fabrics.
+          O Memorial Garden é o único cemitério modelo parque da região de Ourinhos, 
+          projetado para oferecer um ambiente sereno e acolhedor. Nossa estrutura 
+          privilegia a harmonia com a natureza, proporcionando um espaço de paz e 
+          tranquilidade para homenagear aqueles que amamos.
           <br /> <br />
-          We have lots of different clothing options like shoes, jackets and
-          dresses. Not only clothes but we also provide unique Jewellery as
-          well. It is great for us to carry our new clothes all around the
-          country and look different.
+          Com jardins cuidadosamente planejados e uma arquitetura que respeita a 
+          dignidade de cada momento, criamos um lugar onde memórias podem ser 
+          preservadas com carinho e respeito. Cada detalhe foi pensado para transmitir 
+          conforto e serenidade às famílias.
         </p>
       </Left>
       <Right data-scroll ref={Horizontalref}>
-        <Product img={img3} title="Sweatshirts" />
-        <Product img={img4} title="Ethnic Wear" />
-        <Product img={img1} title="Man Basics" />
-        <Product img={img2} title="Tops" />
-        <Product img={img5} title="Blazers" />
-        <Product img={img6} title="Suits" />
-        <Product img={img7} title="Antiques" />
-        <Product img={img8} title="Jewellery" />
-        <Product img={img9} title="Watches" />
-        <Product img={img10} title="Special Edition" />
+        <Product img={img1} title="Ambiente" />
+        <Product img={img2} title="Jardim" />
+        <Product img={img3} title="Tranquilidade" />
+        <Product img={img4} title="Natureza" />
+        <Product img={img5} title="Serenidade" />
+        <Product img={img6} title="Paz" />
+        <Product img={img7} title="Memória" />
+        <Product img={img8} title="Cuidado" />
+        <Product img={img9} title="Acolhimento" />
+        <Product img={img10} title="Respeito" />
+        <Product img={img11} title="Conforto" />
+        <Product img={img12} title="Homenagem" />
       </Right>
     </Section>
   );

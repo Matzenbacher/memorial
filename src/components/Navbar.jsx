@@ -43,10 +43,6 @@ const MenuBtn = styled.li`
   font-size: ${(props) => props.theme.fontmd};
   font-weight: 600;
 
-  /* border-end-start-radius: 50%; */
-
-  /* border-end-end-radius: 50%; */
-
   cursor: pointer;
 
   display: flex;
@@ -55,10 +51,15 @@ const MenuBtn = styled.li`
 
   transition: all 0.3s ease;
 
+  @media (max-width: 64em) {
+    width: 12rem;
+    height: 2.25rem;
+  }
+  
   @media (max-width: 40em) {
     width: 10rem;
     height: 2rem;
-
+    font-size: ${(props) => props.theme.fontsm};
   }
 `;
 
@@ -75,10 +76,19 @@ const MenuItems = styled(motion.ul)`
   width: 100%;
   padding: 0 10rem;
 
+  @media (max-width: 64em) {
+    padding: 0 5rem;
+  }
+  
+  @media (max-width: 48em) {
+    padding: 0 2rem;
+  }
+  
   @media (max-width: 40em) {
-    flex-direction:column;
-    padding:2rem 0;
+    flex-direction: column;
+    padding: 2rem 0;
     height: 50vh;
+    justify-content: space-evenly;
   }
 `;
 
@@ -131,21 +141,21 @@ const Navbar = () => {
           onClick={() => handleScroll('#home')}
         >
           {' '}
-          <Link to="/">Home</Link>
+          <Link to="/">Início</Link>
         </Item>
         <Item
           whileHover={{ scale: 1.1, y: -5 }}
           whileTap={{ scale: 0.9, y: 0 }}
           onClick={() => handleScroll('.about')}
         >
-          <Link to="/">about</Link>
+          <Link to="/">Sobre</Link>
         </Item>
         <Item
           whileHover={{ scale: 1.1, y: -5 }}
           whileTap={{ scale: 0.9, y: 0 }}
           onClick={() => handleScroll('#shop')}
         >
-          <Link to="/">shop</Link>
+          <Link to="/">Espaço</Link>
         </Item>
 
         <Item
@@ -154,7 +164,7 @@ const Navbar = () => {
           onClick={() => handleScroll('.new-arrival')}
         >
           {' '}
-          <Link to="/">new arrival</Link>
+          <Link to="/">Diferenciais</Link>
         </Item>
       </MenuItems>
     </NavContainer>

@@ -34,12 +34,13 @@ const Container = styled.div`
 
 const Banner = styled.h1`
   font-size: ${(props) => props.theme.fontxxxl};
-  font-family: 'Kaushan Script';
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
   color: ${(props) => props.theme.text};
   /* position: absolute; */
   white-space: nowrap;
-  text-transform: uppercase;
-  line-height: 1;
+  text-transform: none;
+  line-height: 1.2;
 
   @media (max-width: 70em){
     font-size: ${(props) => props.theme.fontxxl};
@@ -77,7 +78,7 @@ const Marquee = () => {
             data-scroll-speed="8"
             data-scroll-target="#direction"
           >
-            Fashon is an armour
+            14 anos de história
           </span>
         </Banner>
         <Banner data-scroll data-scroll-speed="-2" data-scroll-target="#direction">
@@ -87,7 +88,7 @@ const Marquee = () => {
             data-scroll-speed="-6"
             data-scroll-target="#direction"
           >
-            To survive everyday life
+            em Ourinhos
           </span>
         </Banner>
         <Banner>
@@ -97,7 +98,7 @@ const Marquee = () => {
             data-scroll-speed="6"
             data-scroll-target="#direction"
           >
-            One is never over-dressed or
+            Mais de 2.000 famílias
           </span>
         </Banner>
         <Banner>
@@ -107,7 +108,7 @@ const Marquee = () => {
             data-scroll-speed="-4"
             data-scroll-target="#direction"
           >
-            under-dressed
+            amparadas com
           </span>
         </Banner>
         <Banner data-scroll data-scroll-speed="6" data-scroll-target="#direction">
@@ -117,7 +118,7 @@ const Marquee = () => {
             data-scroll-speed="6"
             data-scroll-target="#direction"
           >
-            with a Little Black Dress.
+            respeito e dignidade
           </span>
         </Banner>
       </Container>

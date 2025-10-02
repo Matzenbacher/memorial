@@ -90,9 +90,9 @@ const Container = styled.div`
 `;
 
 const Title = styled(motion.h1)`
-  font-size: ${(props) => props.theme.fontxxxl};
-  font-family: 'Kaushan Script';
-  font-weight: 300;
+  font-size: ${(props) => props.theme.fontxxl};
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
   /* text-transform: capitalize; */
   color: ${(props) => props.theme.body};
   text-shadow: 1px 1px 1px ${(props) => props.theme.text};
@@ -218,28 +218,26 @@ let t1= gsap.timeline();
       <Title
         data-scroll data-scroll-speed="-2" data-scroll-direction="horizontal"
       >
-        New Arrivals
+        Diferenciais
       </Title>
 
       <Container ref={ScrollingRef}>
-        <Photos img={img1} name="Denim" />
-        <Photos img={img2} name="Cool Dresses" />
-        <Photos img={img3} name="Jackets" />
-        <Photos img={img4} name="T-shirts" />
+        <Photos img={img1} name="Economia de até 40%" />
+        <Photos img={img2} name="Ambiente Acolhedor" />
+        <Photos img={img3} name="Plantão 24 horas" />
+        <Photos img={img4} name="Plano Preventivo" />
       </Container>
 
       <Text data-scroll data-scroll-speed="-4">
-        There is new collection available for cool clothes in all sizes. This collection
-        is a great way to find a new look for you. It offers a variety of cool apparel
-        styles to fit your taste, while you can also find some cool clothes that you can
-        wear everyday.
+        O Memorial Garden oferece plano preventivo que garante economia de até 40% 
+        e segurança para sua família.
         <br />
         <br />
-        The first line of clothing you will see on this collection is for men. The
-        collection also includes three new styles for women.
+        Nosso ambiente foi planejado para transmitir tranquilidade, com jardins 
+        serenos e estrutura completa para acolher as famílias com dignidade.
         <br />
         <br />
-        Give it a try and experience a new look.
+        Conte com nosso plantão 24 horas para atendimento emergencial sempre que precisar.
       </Text>
     </Section>
   );
