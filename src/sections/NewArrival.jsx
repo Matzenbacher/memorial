@@ -1,7 +1,5 @@
 import { motion } from 'framer-motion';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-import React, {  useLayoutEffect, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import img1 from '../assets/Images/11.webp';
@@ -11,234 +9,193 @@ import img4 from '../assets/Images/14.webp';
 
 const Section = styled.section`
   min-height: 100vh;
-  /* height: auto; */
   width: 100%;
-  margin: 0 auto;
-  /* height: 300vh; */
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  position: relative;
-  /* background-color: ${(props) => props.theme.text}; */
-`;
-
-const Overlay = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30vw;
-  height: 90vh;
-  box-shadow: 0 0 0 5vw ${(props) => props.theme.text};
-  border: 3px solid black;
-
-  z-index: 11;
-
-  @media (max-width: 70em) {
-  width: 40vw;
-
-    height: 80vh;
-  }
-
-  @media (max-width: 64em) {
-  width: 50vw;
-  box-shadow: 0 0 0 60vw ${(props) => props.theme.text};
-
-    height: 80vh;
-  }
-  @media (max-width: 48em) {
-  width: 60vw;
-
-    height: 80vh;
-  }
-  @media (max-width: 30em) {
-  width: 80vw;
-
-    height: 60vh;
-  }
-`;
-
-const Container = styled.div`
-  position: absolute;
-  top: 0%;
-  left: 50%;
-  transform: translate(-50%, 0%);
-  width: 25vw;
-  height: auto;
-  /* background-color: yellow; */
+  padding: 5rem 0;
+  background: ${(props) => props.theme.body};
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  @media (max-width: 64em) {
-  width: 30vw;
-
-
-  }
   @media (max-width: 48em) {
-  width: 40vw;
-
-  }
-  @media (max-width: 30em) {
-  width: 60vw;
-
+    padding: 3rem 0;
   }
 `;
 
 const Title = styled(motion.h1)`
   font-size: ${(props) => props.theme.fontxxl};
   font-family: 'Poppins', sans-serif;
-  font-weight: 400;
-  /* text-transform: capitalize; */
-  color: ${(props) => props.theme.body};
-  text-shadow: 1px 1px 1px ${(props) => props.theme.text};
-
-  position: absolute;
-  top: 2rem;
-  left: 1rem;
-  z-index: 15;
+  font-weight: 700;
+  color: ${(props) => props.theme.primary};
+  text-align: center;
+  margin-bottom: 4rem;
 
   @media (max-width: 64em) {
-    font-size: ${(props) => props.theme.fontxxl};
-
-
-  }
-  @media (max-width: 48em) {
     font-size: ${(props) => props.theme.fontxl};
-  
+    margin-bottom: 3rem;
   }
-`;
-const Text = styled.div`
-  width: 20%;
-  font-size: ${(props) => props.theme.fontlg};
-  font-weight: 300;
-  position: absolute;
-  padding: 2rem;
-  top: 0;
-  right: 0;
-  z-index: 11;
-
+  
   @media (max-width: 48em) {
-    display: none;
-  
+    font-size: ${(props) => props.theme.fontlg};
+    margin-bottom: 2rem;
   }
- 
 `;
 
-const Item = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 5rem 0;
+const CardsContainer = styled.div`
+  width: 90%;
+  max-width: 1400px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 3rem;
+  padding: 0 2rem;
 
-  h2 {
+  @media (max-width: 64em) {
+    gap: 2rem;
   }
+  
+  @media (max-width: 48em) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+`;
+
+const Card = styled(motion.div)`
+  background: #FFFFFF;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+const ImageWrapper = styled.div`
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  position: relative;
 
   img {
     width: 100%;
-    height: auto;
-    z-index: 5;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  ${Card}:hover & img {
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 48em) {
+    height: 220px;
   }
 `;
-const Photos = ({ img, name }) => {
-  return (
-    <Item>
-      <img width="400" height="600" src={img} alt={name} />
-      <h2>{name}</h2>
-    </Item>
-  );
+
+const CardContent = styled.div`
+  padding: 2rem;
+  text-align: center;
+
+  h2 {
+    font-size: ${(props) => props.theme.fontlg};
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: ${(props) => props.theme.primary};
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: ${(props) => props.theme.fontmd};
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    color: ${(props) => props.theme.dark};
+    line-height: 1.6;
+  }
+
+  @media (max-width: 48em) {
+    padding: 1.5rem;
+    
+    h2 {
+      font-size: ${(props) => props.theme.fontmd};
+    }
+    
+    p {
+      font-size: ${(props) => props.theme.fontsm};
+    }
+  }
+`;
+
+const differentials = [
+  {
+    img: img1,
+    title: "Economia de até 40%",
+    description: "O Memorial Garden oferece plano preventivo que garante economia significativa e segurança para sua família."
+  },
+  {
+    img: img2,
+    title: "Ambiente Acolhedor",
+    description: "Nosso ambiente foi planejado para transmitir tranquilidade, com jardins serenos e estrutura completa."
+  },
+  {
+    img: img3,
+    title: "Plantão 24 horas",
+    description: "Conte com nosso plantão 24 horas para atendimento emergencial sempre que precisar."
+  },
+  {
+    img: img4,
+    title: "Plano Preventivo",
+    description: "Planejamento antecipado que proporciona economia e tranquilidade para você e sua família."
+  }
+];
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  })
 };
 
 const NewArrival = () => {
-   gsap.registerPlugin(ScrollTrigger);
-  const ref = useRef(null);
-
-  const ScrollingRef = useRef(null);
-
-
-  useLayoutEffect(() => {
-    let element = ref.current;
-
-    let scrollingElement = ScrollingRef.current;
-let t1= gsap.timeline();
-    setTimeout(() => {
-      let mainHeight = scrollingElement.scrollHeight;
-      element.style.height = `calc(${mainHeight / 4}px)`;
-      t1.to(element, {
-        scrollTrigger: {
-          trigger: element,
-          start: 'top top',
-          end: 'bottom+=100% top-=100%',
-          scroller: '.App', //locomotive-scroll
-          scrub: 1,
-          pin: true,
-          // markers: true,
-        },
-        ease: 'none',
-      });
-
-      t1.fromTo(
-        scrollingElement,
-        {
-          y: '0',
-        },
-        {
-          y: '-100%',
-          scrollTrigger: {
-            // id: `section-${index + 1}`,
-            trigger: scrollingElement,
-            start: 'top top',
-            end: 'bottom top',
-            scroller: '.App',
-            scrub: 1,
-            // markers: true,
-          },
-        },
-      );
-
-      ScrollTrigger.refresh();
-    }, 1000);
-    ScrollTrigger.refresh();
-
-    return () => {
-      t1.kill();
-      ScrollTrigger.kill();
-    };
-  }, []);
-
   return (
-    <Section  ref={ref} id="fixed-target" className="new-arrival">
-      <Overlay />
-
+    <Section id="fixed-target" className="new-arrival">
       <Title
-        data-scroll data-scroll-speed="-2" data-scroll-direction="horizontal"
+        initial={{ opacity: 0, y: -30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6 }}
       >
         Diferenciais
       </Title>
 
-      <Container ref={ScrollingRef}>
-        <Photos img={img1} name="Economia de até 40%" />
-        <Photos img={img2} name="Ambiente Acolhedor" />
-        <Photos img={img3} name="Plantão 24 horas" />
-        <Photos img={img4} name="Plano Preventivo" />
-      </Container>
-
-      <Text data-scroll data-scroll-speed="-4">
-        O Memorial Garden oferece plano preventivo que garante economia de até 40% 
-        e segurança para sua família.
-        <br />
-        <br />
-        Nosso ambiente foi planejado para transmitir tranquilidade, com jardins 
-        serenos e estrutura completa para acolher as famílias com dignidade.
-        <br />
-        <br />
-        Conte com nosso plantão 24 horas para atendimento emergencial sempre que precisar.
-      </Text>
+      <CardsContainer>
+        {differentials.map((item, index) => (
+          <Card
+            key={index}
+            custom={index}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={cardVariants}
+          >
+            <ImageWrapper>
+              <img src={item.img} alt={item.title} />
+            </ImageWrapper>
+            <CardContent>
+              <h2>{item.title}</h2>
+              <p>{item.description}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </CardsContainer>
     </Section>
   );
 };
