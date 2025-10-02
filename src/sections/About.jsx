@@ -25,9 +25,8 @@ const Title = styled.h1`
 
   position: absolute;
   top: 1rem;
-  right: 5%;
+  left: 5%;
   z-index: 11;
-  transform: translateX(-50%);
 
   @media (max-width: 64em) {
     font-size: ${(props) => props.theme.fontxxl};
@@ -37,20 +36,29 @@ const Title = styled.h1`
   }
 `;
 
-const Right = styled.div`
+const TextContainer = styled.div`
   width: 35%;
   background-color: ${(props) => props.theme.body};
   color: ${(props) => props.theme.text};
-
   min-height: 100vh;
   z-index: 10;
-
   position: fixed;
   right: 0;
+  top: 0;
+  
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 2rem;
+
+  h2 {
+    font-size: ${(props) => props.theme.fontxxl};
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: ${(props) => props.theme.primary};
+    margin-bottom: 2rem;
+  }
 
   p {
     font-size: ${(props) => props.theme.fontlg};
@@ -62,6 +70,12 @@ const Right = styled.div`
 
   @media (max-width: 64em) {
     width: 40%;
+    
+    h2 {
+      font-size: ${(props) => props.theme.fontxl};
+      margin-bottom: 1.5rem;
+    }
+    
     p {
       font-size: ${(props) => props.theme.fontmd};
       width: 90%;
@@ -74,6 +88,10 @@ const Right = styled.div`
     min-height: auto;
     padding: 3rem 2rem;
     
+    h2 {
+      font-size: ${(props) => props.theme.fontlg};
+    }
+    
     p {
       font-size: ${(props) => props.theme.fontsm};
       width: 100%;
@@ -83,77 +101,81 @@ const Right = styled.div`
   @media (max-width: 30em) {
     padding: 2rem 1rem;
     
+    h2 {
+      font-size: ${(props) => props.theme.fontmd};
+      margin-bottom: 1rem;
+    }
+    
     p {
       font-size: ${(props) => props.theme.fontxs};
     }
   }
 `;
 
-const Left = styled.div`
+const VideoContainer = styled.div`
   position: absolute;
-  right: 35%;
-  padding-right: 30%;
+  left: 0;
+  top: 0;
+  width: 65%;
   background-color: ${(props) => props.theme.grey};
   min-height: 100vh;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
-  padding: 4rem;
+  padding: 4rem 2rem;
+  
+  @media (max-width: 64em) {
+    width: 60%;
+  }
   
   @media (max-width: 48em) {
     position: relative;
-    right: 0;
-    padding: 2rem;
+    padding: 3rem 2rem;
     width: 100%;
     min-height: 60vh;
-    flex-direction: column;
   }
 `;
 
 const Item = styled(motion.div)`
-  flex: 1;
+  width: 100%;
+  max-width: 37rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  max-width: 28rem;
   
   img, video {
     width: 100%;
-    height: 28rem;
+    height: 26rem;
     object-fit: cover;
     border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   }
 
   iframe {
     width: 100%;
-    height: 28rem;
+    height: 26rem;
     border: none;
     border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   }
 
   h1 {
     font-weight: 500;
     text-align: center;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     font-size: ${(props) => props.theme.fontlg};
-    color: ${(props) => props.theme.text};
   }
 
   @media (max-width: 64em) {
-    max-width: 24rem;
+    max-width: 32rem;
     
     img, video, iframe {
-      height: 24rem;
+      height: 22rem;
     }
     
     h1 {
       font-size: ${(props) => props.theme.fontmd};
-      margin-top: 1rem;
     }
   }
 
@@ -176,7 +198,7 @@ const Item = styled(motion.div)`
     
     h1 {
       font-size: ${(props) => props.theme.fontxs};
-      margin-top: 0.75rem;
+      margin-top: 0.5rem;
     }
   }
 `;
@@ -184,6 +206,7 @@ const Item = styled(motion.div)`
 const Media = ({ type, src, title = "" }) => {
   return (
     <Item className="media-item">
+      <h1>{title}</h1>
       {type === "map" && (
         <iframe
           title={title}
@@ -202,7 +225,6 @@ const Media = ({ type, src, title = "" }) => {
           Seu navegador não suporta vídeo.
         </video>
       )}
-      <h1>{title}</h1>
     </Item>
   );
 };
@@ -226,43 +248,22 @@ const About = () => {
         scrollTrigger: {
           trigger: element,
           start: "top top",
-          end: "+=200%",
+          end: "+=100%",
           scroller: ".App",
           pin: true,
           pinSpacing: true,
           scrub: 1,
-          // markers: true,
         }
       });
 
-      // Fase 1: Aproximação (0% - 40%)
+      // Apenas aproximação - elementos aparecem e ficam
       t1.fromTo(items[0], 
         { x: -200, opacity: 0 },
-        { x: 0, opacity: 1, ease: "power2.out" },
-        0
+        { x: 0, opacity: 1, ease: "power2.out" }
       );
       
-      t1.fromTo(items[1], 
-        { x: 200, opacity: 0 },
-        { x: 0, opacity: 1, ease: "power2.out" },
-        0
-      );
-
-      // Fase 2: Pausa (40% - 60%) - elementos ficam parados
+      // Elementos ficam parados no final
       t1.to({}, { duration: 0.5 });
-
-      // Fase 3: Distanciamento (60% - 100%)
-      t1.to(items[0], { 
-        x: -200, 
-        opacity: 0, 
-        ease: "power2.in" 
-      });
-      
-      t1.to(items[1], { 
-        x: 200, 
-        opacity: 0, 
-        ease: "power2.in" 
-      }, "<");
       
       ScrollTrigger.refresh();
     }, 1000);
@@ -277,7 +278,8 @@ const About = () => {
       <Title data-scroll data-scroll-speed="-2">
         Sobre
       </Title>
-      <Right>
+      <TextContainer>
+        <h2>Vídeo Institucional</h2>
         <p>
           O Memorial Garden é o único cemitério modelo parque da região de Ourinhos,
           projetado para oferecer um ambiente sereno, acolhedor e em harmonia com a natureza.
@@ -286,19 +288,14 @@ const About = () => {
           com dignidade e respeito. Nossos jardins cuidadosamente planejados proporcionam
           um espaço de paz e tranquilidade para as famílias.
         </p>
-      </Right>
-      <Left data-scroll ref={Horizontalref}>
+      </TextContainer>
+      <VideoContainer data-scroll ref={Horizontalref}>
         <Media 
           type="video" 
           src="/videos/video-institucional.mp4" 
-          title="Vídeo Institucional"
+          title=""
         />
-        <Media 
-          type="map" 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29412.0!2d-49.8766!3d-22.9766!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjLCsDU4JzM1LjgiUyA0OcKwNTInMzUuOCJX!5e0!3m2!1spt-BR!2sbr!4v1234567890123!5m2!1spt-BR!2sbr&maptype=roadmap&disableDefaultUI=true&zoomControl=false" 
-          title="Nossa Localização"
-        />
-      </Left>
+      </VideoContainer>
     </Section>
   );
 };

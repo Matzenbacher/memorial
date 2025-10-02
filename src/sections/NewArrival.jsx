@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
-import React from 'react';
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import React, { useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import img1 from '../assets/Images/11.webp';
@@ -7,60 +9,60 @@ import img2 from '../assets/Images/12.webp';
 import img3 from '../assets/Images/13.webp';
 import img4 from '../assets/Images/14.webp';
 
-const Section = styled.section`
+const Section = styled(motion.section)`
   min-height: 100vh;
+  height: auto;
   width: 100%;
-  padding: 5rem 0;
-  background: ${(props) => props.theme.body};
-
+  margin: 0 auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  @media (max-width: 48em) {
-    padding: 3rem 0;
-  }
+  position: relative;
+  background: ${(props) => props.theme.body};
 `;
 
-const Title = styled(motion.h1)`
-  font-size: ${(props) => props.theme.fontxxl};
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  color: ${(props) => props.theme.primary};
-  text-align: center;
-  margin-bottom: 4rem;
+const Title = styled.h1`
+  font-size: ${(props) => props.theme.fontxxxl};
+  font-family: "Kaushan Script";
+  font-weight: 300;
+  color: ${(props) => props.theme.text};
+  text-shadow: 1px 1px 1px ${(props) => props.theme.grey};
+  position: absolute;
+  top: 1rem;
+  left: 5%;
+  z-index: 11;
 
   @media (max-width: 64em) {
-    font-size: ${(props) => props.theme.fontxl};
-    margin-bottom: 3rem;
+    font-size: ${(props) => props.theme.fontxxl};
   }
-  
   @media (max-width: 48em) {
-    font-size: ${(props) => props.theme.fontlg};
-    margin-bottom: 2rem;
+    font-size: ${(props) => props.theme.fontxl};
   }
 `;
 
 const CardsContainer = styled.div`
-  width: 90%;
-  max-width: 1400px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 3rem;
-  padding: 0 2rem;
+  width: 100%;
+  padding: 8rem 0 4rem 0;
+  padding-left: calc(200vw - 10rem);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
 
-  @media (max-width: 64em) {
-    gap: 2rem;
-  }
-  
   @media (max-width: 48em) {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    padding: 6rem 0 3rem 0;
+    padding-left: calc(50vw - 7.5rem);
+    overflow-x: auto;
   }
 `;
 
 const Card = styled(motion.div)`
+  display: inline-block;
+  width: 20rem;
+  margin-right: 2.5rem;
+  flex-shrink: 0;
   background: #FFFFFF;
   border-radius: 20px;
   overflow: hidden;
@@ -70,6 +72,21 @@ const Card = styled(motion.div)`
   &:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (max-width: 64em) {
+    width: 18rem;
+    margin-right: 2rem;
+  }
+
+  @media (max-width: 48em) {
+    width: 15rem;
+    margin-right: 1.5rem;
+  }
+  
+  @media (max-width: 30em) {
+    width: 12rem;
+    margin-right: 1rem;
   }
 `;
 
@@ -151,49 +168,97 @@ const differentials = [
   }
 ];
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.1,
-      duration: 0.6,
-      ease: "easeOut"
-    }
-  })
+const DifferentialCard = ({ img, title, description }) => {
+  return (
+    <Card
+      initial={{ filter: "grayscale(100%)" }}
+      whileInView={{ filter: "grayscale(0%)" }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: false, amount: "all" }}
+    >
+      <ImageWrapper>
+        <img src={img} alt={title} />
+      </ImageWrapper>
+      <CardContent>
+        <h2>{title}</h2>
+        <p>{description}</p>
+      </CardContent>
+    </Card>
+  );
 };
 
 const NewArrival = () => {
+  gsap.registerPlugin(ScrollTrigger);
+  const ref = useRef(null);
+  const horizontalRef = useRef(null);
+
+  useLayoutEffect(() => {
+    let element = ref.current;
+    let scrollingElement = horizontalRef.current;
+
+    let windowWidth = window.innerWidth;
+    let scrollWidth = scrollingElement.scrollWidth;
+    
+    // Calcula quanto precisa mover para centralizar todos os 4 cards
+    // scrollWidth = largura total dos cards (~4000px)
+    // windowWidth = viewport (~1400px)
+    // Queremos mover até que todos caibam centralizados
+    let movementDistance = scrollWidth - windowWidth;
+    
+    let pinWrapWidth = movementDistance * 2; // multiplica para controlar duração
+    let t1 = gsap.timeline();
+
+    setTimeout(() => {
+      t1.to(element, {
+        scrollTrigger: {
+          trigger: element,
+          start: "top top",
+          end: `${pinWrapWidth} bottom`,
+          scroller: ".App",
+          scrub: 1,
+          pin: true,
+        },
+        height: `${scrollingElement.scrollWidth}px`,
+        ease: "none",
+      });
+
+      t1.to(scrollingElement, {
+        scrollTrigger: {
+          trigger: scrollingElement,
+          start: "top top",
+          end: `${pinWrapWidth} bottom`,
+          scroller: ".App",
+          scrub: 1,
+        },
+        x: -movementDistance, // move apenas o necessário para centralizar
+        ease: "none",
+      });
+      
+      ScrollTrigger.refresh();
+    }, 1000);
+
+    ScrollTrigger.refresh();
+
+    return () => {
+      t1.kill();
+      ScrollTrigger.kill();
+    };
+  }, []);
+
   return (
-    <Section id="fixed-target" className="new-arrival">
-      <Title
-        initial={{ opacity: 0, y: -30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6 }}
-      >
+    <Section ref={ref} id="fixed-target" className="new-arrival">
+      <Title data-scroll data-scroll-speed="-2">
         Diferenciais
       </Title>
 
-      <CardsContainer>
+      <CardsContainer data-scroll ref={horizontalRef}>
         {differentials.map((item, index) => (
-          <Card
+          <DifferentialCard
             key={index}
-            custom={index}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={cardVariants}
-          >
-            <ImageWrapper>
-              <img src={item.img} alt={item.title} />
-            </ImageWrapper>
-            <CardContent>
-              <h2>{item.title}</h2>
-              <p>{item.description}</p>
-            </CardContent>
-          </Card>
+            img={item.img}
+            title={item.title}
+            description={item.description}
+          />
         ))}
       </CardsContainer>
     </Section>
