@@ -33,27 +33,6 @@ const Section = styled(motion.section)`
   /* background-color: orange; */
 `;
 
-const Title = styled.h1`
-  font-size: ${(props) => props.theme.fontxxxl};
-  font-family: "Kaushan Script";
-  font-weight: 300;
-  /* text-transform: capitalize; */
-  color: ${(props) => props.theme.text};
-  text-shadow: 1px 1px 1px ${(props) => props.theme.body};
-
-  position: absolute;
-  top: 1rem;
-  left: 5%;
-  z-index: 11;
-
-  @media (max-width: 64em) {
-    font-size: ${(props) => props.theme.fontxxl};
-  }
-  @media (max-width: 48em) {
-    font-size: ${(props) => props.theme.fontxl};
-  }
-`;
-
 const Left = styled.div`
   width: 35%;
   background-color: ${(props) => props.theme.body};
@@ -65,9 +44,20 @@ const Left = styled.div`
   position: fixed;
   left: 0;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 2rem;
+
+  h2 {
+    font-size: ${(props) => props.theme.fontxxl};
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: ${(props) => props.theme.primary};
+    margin-bottom: 2rem;
+    text-align: center;
+    width: 100%;
+  }
 
   p {
     font-size: ${(props) => props.theme.fontlg};
@@ -75,10 +65,17 @@ const Left = styled.div`
     width: 80%;
     margin: 0 auto;
     line-height: 1.6;
+    text-align: justify;
   }
 
   @media (max-width: 64em) {
     width: 40%;
+    
+    h2 {
+      font-size: ${(props) => props.theme.fontxl};
+      margin-bottom: 1.5rem;
+    }
+    
     p {
       font-size: ${(props) => props.theme.fontmd};
       width: 90%;
@@ -91,6 +88,10 @@ const Left = styled.div`
     min-height: auto;
     padding: 3rem 2rem;
     
+    h2 {
+      font-size: ${(props) => props.theme.fontlg};
+    }
+    
     p {
       font-size: ${(props) => props.theme.fontsm};
       width: 100%;
@@ -99,6 +100,11 @@ const Left = styled.div`
   
   @media (max-width: 30em) {
     padding: 2rem 1rem;
+    
+    h2 {
+      font-size: ${(props) => props.theme.fontmd};
+      margin-bottom: 1rem;
+    }
     
     p {
       font-size: ${(props) => props.theme.fontxs};
@@ -188,7 +194,6 @@ const Item = styled(motion.div)`
     }
   }
 `;
-//data-scroll data-scroll-speed="-2" data-scroll-direction="horizontal"
 const Product = ({ img, title = "" }) => {
   return (
     // x: 100, y: -100
@@ -259,16 +264,15 @@ const Shop = () => {
 
   return (
     <Section ref={ref} id="shop">
-      <Title data-scroll data-scroll-speed="-0.5">
-        Nosso Espaço
-      </Title>
       <Left>
+        <h2>Nosso Espaço</h2>
+        <br /> <br />
         <p>
           O Memorial Garden é o único cemitério modelo parque da região de Ourinhos, 
           projetado para oferecer um ambiente sereno e acolhedor. Nossa estrutura 
           privilegia a harmonia com a natureza, proporcionando um espaço de paz e 
           tranquilidade para homenagear aqueles que amamos.
-          <br /> <br />
+
           Com jardins cuidadosamente planejados e uma arquitetura que respeita a 
           dignidade de cada momento, criamos um lugar onde memórias podem ser 
           preservadas com carinho e respeito. Cada detalhe foi pensado para transmitir 
