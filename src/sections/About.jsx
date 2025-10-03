@@ -114,7 +114,7 @@ const TextContainer = styled.div`
 
 const VideoContainer = styled.div`
   position: absolute;
-  right: 35%;
+  right: 80%; /* Posição inicial mais à esquerda */
   padding-right: 30%;
   background-color: ${(props) => props.theme.grey};
   min-height: 100vh;
@@ -202,7 +202,7 @@ const Item = styled(motion.div)`
   }
 `;
 
-const Media = ({ type, src, title = "" }) => {
+const Media = React.forwardRef(({ type, src, title = "" }, ref) => {
   return (
     <Item className="media-item">
       <h1>{title}</h1>
@@ -216,6 +216,7 @@ const Media = ({ type, src, title = "" }) => {
       )}
       {type === "video" && (
         <video 
+          ref={ref}
           controls 
           preload="metadata"
           playsInline
@@ -226,12 +227,13 @@ const Media = ({ type, src, title = "" }) => {
       )}
     </Item>
   );
-};
+});
 
 const About = () => {
   gsap.registerPlugin(ScrollTrigger);
   const ref = useRef(null);
   const Horizontalref = useRef(null);
+  const videoRef = useRef(null); // Ref para controlar o vídeo
 
   useLayoutEffect(() => {
     let element = ref.current;
@@ -239,46 +241,56 @@ const About = () => {
 
     if (!element || !scrollingElement) return;
 
-    let pinWrapWidth = scrollingElement.offsetWidth;
-    // Usar valores fixos para garantir funcionamento
-    let scrollDistance = 2000; // Distância fixa de scroll para completar a animação
-    let t1 = gsap.timeline();
+    let scrollDistance = 1000; // Fase 1: movimento do vídeo
+    let holdDistance = 900;    // Fase 2: tempo travado
+    let totalDistance = scrollDistance + holdDistance; // 1900px total
+    let movePhaseRatio = scrollDistance / totalDistance; // 0.526 (53%)
 
     setTimeout(() => {
-      // Pin da seção durante a animação
-      t1.to(element, {
-        scrollTrigger: {
-          trigger: element,
-          start: "top top",
-          end: `+=${scrollDistance}`, // Scroll fixo de 2000px
-          scroller: ".App",
-          scrub: 1, // Velocidade 1:1
-          pin: true,
-          markers: true, // Temporário para debug
+      // ScrollTrigger com pin que controla o movimento
+      ScrollTrigger.create({
+        trigger: element,
+        start: "top top",
+        end: `+=${totalDistance}`, // Total: 1900px (1000 movimento + 900 hold)
+        scroller: ".App",
+        pin: true,
+        scrub: 1,
+        markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 },
+        id: "pin-movement",
+        onUpdate: (self) => {
+          let progress = self.progress;
+          
+          // FASE 1 (0% → ~53%): Movimento do vídeo
+          if (progress < movePhaseRatio) {
+            let moveProgress = progress / movePhaseRatio; // Normaliza para 0-1
+            gsap.set(scrollingElement, { x: `${moveProgress * 74}%` });
+          } 
+          // FASE 2 (53% → 100%): Vídeo fixo no centro
+          else {
+            gsap.set(scrollingElement, { x: "74%" }); // Mantém fixo no centro (2/3 da tela)
+          }
         },
-        ease: "none",
-      });
-
-      // Move o vídeo horizontalmente até centralizar
-      t1.to(scrollingElement, {
-        scrollTrigger: {
-          trigger: scrollingElement,
-          start: "top top",
-          end: `+=${scrollDistance}`, // Mesmo scroll fixo
-          scroller: ".App",
-          scrub: 1, // Velocidade 1:1
-          markers: true, // Temporário para debug
+        onLeave: () => {
+          // Quando o end vermelho (fim do pin) passar pelo topo da viewport
+          console.log('End marker passou pelo start - mutando vídeo');
+          if (videoRef.current && !videoRef.current.paused) {
+            videoRef.current.muted = true;
+          }
         },
-        x: 215, // Movimento fixo de 215px para a esquerda para centralizar
-        ease: "none",
+        onEnterBack: () => {
+          // Quando voltar para dentro da área do pin
+          console.log('Voltou para área do pin - desmutando vídeo');
+          if (videoRef.current && !videoRef.current.paused) {
+            videoRef.current.muted = false;
+          }
+        }
       });
       
       ScrollTrigger.refresh();
     }, 1000);
 
     return () => {
-      t1.kill();
-      ScrollTrigger.kill();
+      ScrollTrigger.getAll().forEach(st => st.kill());
     };
   }, []);
 
@@ -299,6 +311,7 @@ const About = () => {
       </TextContainer>
       <VideoContainer data-scroll ref={Horizontalref}>
         <Media 
+          ref={videoRef}
           type="video" 
           src="/videos/video-institucional.mp4" 
           title=""
