@@ -240,33 +240,36 @@ const About = () => {
     if (!element || !scrollingElement) return;
 
     let pinWrapWidth = scrollingElement.offsetWidth;
+    // Usar valores fixos para garantir funcionamento
+    let scrollDistance = 2000; // Distância fixa de scroll para completar a animação
     let t1 = gsap.timeline();
 
     setTimeout(() => {
-      // Pin da section
+      // Pin da seção durante a animação
       t1.to(element, {
         scrollTrigger: {
           trigger: element,
           start: "top top",
-          end: `${pinWrapWidth} bottom`,
+          end: `+=${scrollDistance}`, // Scroll fixo de 2000px
           scroller: ".App",
-          scrub: 1,
+          scrub: 1, // Velocidade 1:1
           pin: true,
+          markers: true, // Temporário para debug
         },
-        height: `${scrollingElement.scrollWidth}px`,
         ease: "none",
       });
 
-      // Move o container até centralizar o vídeo
+      // Move o vídeo horizontalmente até centralizar
       t1.to(scrollingElement, {
         scrollTrigger: {
           trigger: scrollingElement,
           start: "top top",
-          end: `${pinWrapWidth} bottom`,
+          end: `+=${scrollDistance}`, // Mesmo scroll fixo
           scroller: ".App",
-          scrub: 1,
+          scrub: 1, // Velocidade 1:1
+          markers: true, // Temporário para debug
         },
-        x: pinWrapWidth,
+        x: 215, // Movimento fixo de 215px para a esquerda para centralizar
         ease: "none",
       });
       
@@ -282,10 +285,9 @@ const About = () => {
   return (
     <Section ref={ref} id="about">
       <Title data-scroll data-scroll-speed="-2">
-        Sobre
       </Title>
       <TextContainer>
-        <h2>Vídeo Institucional</h2>
+        <h2>Sobre</h2>
         <p>
           O Memorial Garden é o único cemitério modelo parque da região de Ourinhos,
           projetado para oferecer um ambiente sereno, acolhedor e em harmonia com a natureza.
