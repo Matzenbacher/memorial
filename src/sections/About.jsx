@@ -9,12 +9,135 @@ const Section = styled(motion.section)`
   height: auto;
   width: 100%;
   margin: 0 auto;
-  overflow: hidden;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
   position: relative;
+  display: flex;
+  background-color: ${(props) => props.theme.grey};
+  
+  @media (max-width: 48em) {
+    flex-direction: column;
+  }
 `;
+
+const ContentWrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  overflow: hidden;
+  box-sizing: border-box;
+  
+  @media (max-width: 48em) {
+    position: relative;
+    height: auto;
+    flex-direction: column;
+  }
+`;
+
+/* const DivisorLine1 = styled.div`
+  // Primeira linha divisória - marca 30% (meio de 60%)
+  position: absolute;
+  left: 30%;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #FFD700 0px,
+    #FFD700 20px,
+    transparent 20px,
+    transparent 40px
+  );
+  transform: translateX(-4px);
+  z-index: 100;
+  opacity: 0.9;
+  pointer-events: none;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+  
+  &::after {
+    content: '30%';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #FFD700;
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 18px;
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+  
+  @media (max-width: 48em) {
+    display: none;
+  }
+`; */
+
+/* const DivisorLine2 = styled.div`
+  // Segunda linha divisória - marca 60% (fim do vídeo/início do texto)
+  position: absolute;
+  left: 60%;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #00FF00 0px,
+    #00FF00 20px,
+    transparent 20px,
+    transparent 40px
+  );
+  transform: translateX(-4px);
+  z-index: 100;
+  opacity: 0.9;
+  pointer-events: none;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+  
+  &::after {
+    content: '60%';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #00FF00;
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 18px;
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+  
+  @media (max-width: 48em) {
+    display: none;
+  }
+`; */
+
+/* const CenterLine = styled.div`
+  // Linha rosa no meio de 60% (30%) - objetivo final do vídeo
+  position: absolute;
+  left: 30%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, 
+    #FF3984 0%, 
+    #6C20AF 50%, 
+    #FF3984 100%);
+  transform: translateX(-2px);
+  z-index: 101;
+  opacity: 0.9;
+  pointer-events: none;
+  box-shadow: 0 0 12px rgba(255, 57, 132, 0.6);
+  
+  @media (max-width: 48em) {
+    display: none;
+  }
+`; */
 
 const Title = styled.h1`
   font-size: ${(props) => props.theme.fontxxxl};
@@ -25,7 +148,8 @@ const Title = styled.h1`
 
   position: absolute;
   top: 1rem;
-  left: 5%;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 11;
 
   @media (max-width: 64em) {
@@ -37,14 +161,14 @@ const Title = styled.h1`
 `;
 
 const TextContainer = styled.div`
-  width: 35%;
+  width: 40%; /* 40% da tela */
+  height: 100vh;
   background-color: ${(props) => props.theme.body};
   color: ${(props) => props.theme.text};
-  min-height: 100vh;
   z-index: 10;
-  position: fixed;
-  right: 0;
-  top: 0;
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
   
   display: flex;
   flex-direction: column;
@@ -58,6 +182,8 @@ const TextContainer = styled.div`
     font-weight: 700;
     color: ${(props) => props.theme.primary};
     margin-bottom: 2rem;
+    text-align: center;
+    width: 100%;
   }
 
   p {
@@ -66,6 +192,7 @@ const TextContainer = styled.div`
     width: 80%;
     margin: 0 auto;
     line-height: 1.6;
+    text-align: justify;
   }
 
   @media (max-width: 64em) {
@@ -113,30 +240,71 @@ const TextContainer = styled.div`
 `;
 
 const VideoContainer = styled.div`
-  position: absolute;
-  right: 80%; /* Posição inicial mais à esquerda */
-  padding-right: 30%;
+  width: 60%; /* 60% da tela */
+  height: 100vh;
   background-color: ${(props) => props.theme.grey};
-  min-height: 100vh;
-
+  position: relative;
+  overflow: visible; /* Permite vídeo sair pela esquerda */
+  flex-shrink: 0;
+  
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   
+  /* Linha roxa marca onde o centro do card do vídeo deve ficar */
+  /* &::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, 
+      ${(props) => props.theme.primary} 0%, 
+      ${(props) => props.theme.accent} 50%, 
+      ${(props) => props.theme.primary} 100%);
+    transform: translateX(-1.5px);
+    z-index: 6;
+    opacity: 0.8;
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(108, 32, 175, 0.5);
+  } */
+  
   @media (max-width: 48em) {
-    position: relative;
-    right: 0;
-    padding-right: 2rem;
     width: 100%;
     min-height: 60vh;
+    height: auto;
+    
+    &::before {
+      display: none;
+    }
   }
 `;
 
 const Item = styled(motion.div)`
   display: inline-block;
   width: 37rem;
-  margin-left: 6rem;
   flex-shrink: 0;
+  position: relative;
+  
+  /* Linha azul no centro do card do vídeo */
+  /* &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, 
+      #00BFFF 0%, 
+      #1E90FF 50%, 
+      #00BFFF 100%);
+    transform: translateX(-1.5px);
+    z-index: 10;
+    opacity: 0.8;
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(30, 144, 255, 0.6);
+  } */
   
   video {
     width: 100%;
@@ -247,6 +415,49 @@ const About = () => {
     let movePhaseRatio = scrollDistance / totalDistance; // 0.526 (53%)
 
     setTimeout(() => {
+      // 🎯 SIMPLES: Linha amarela = 30% viewport | Linha azul = centro do vídeo
+      // Queremos: centro do vídeo em 30% do viewport SEMPRE
+      const recalculate = () => {
+        const viewportWidth = window.innerWidth;
+        const videoCard = scrollingElement.querySelector('.media-item');
+        const videoCardWidth = videoCard?.offsetWidth || 592;
+        
+        // Linha amarela está SEMPRE em 30% do viewport (em pixels)
+        const linhaAmarelaEmPx = viewportWidth * 0.3;
+        
+        // Centro do card deve ficar em 30% do viewport
+        // Se o card tem left=0 inicialmente, seu centro está em cardWidth/2
+        // Para mover o centro para 30% do viewport:
+        // left do card = 30%viewport - cardWidth/2
+        const leftDoCard = linhaAmarelaEmPx - (videoCardWidth / 2);
+        
+        // Converter para porcentagem do viewport (não do card!)
+        const targetPositionPercent = (leftDoCard / viewportWidth) * 100;
+        
+        console.log('🎯 Target:', {
+          viewport: viewportWidth,
+          linhaAmarela: linhaAmarelaEmPx + 'px (30%)',
+          cardWidth: videoCardWidth,
+          leftDoCard: leftDoCard + 'px',
+          targetPercent: targetPositionPercent.toFixed(2) + '% do viewport'
+        });
+        
+        return { targetPositionPercent };
+      };
+      
+      let { targetPositionPercent } = recalculate();
+      
+      // ✅ IMPORTANTE: Posicionar vídeo fora da tela (-100vw) ANTES de criar o ScrollTrigger
+      gsap.set(scrollingElement, { x: '-100vw' });
+      console.log('✅ Vídeo posicionado em -100vw (fora da tela)');
+      
+      // Recalcular em resize
+      window.addEventListener('resize', () => {
+        const result = recalculate();
+        targetPositionPercent = result.targetPositionPercent;
+        console.log('Recalculated target position:', targetPositionPercent, '%');
+      });
+      
       // ScrollTrigger com pin que controla o movimento
       ScrollTrigger.create({
         trigger: element,
@@ -260,14 +471,23 @@ const About = () => {
         onUpdate: (self) => {
           let progress = self.progress;
           
-          // FASE 1 (0% → ~53%): Movimento do vídeo
+          // FASE 1 (0% → ~53%): Vídeo entra da esquerda até linha azul tocar linha amarela
           if (progress < movePhaseRatio) {
             let moveProgress = progress / movePhaseRatio; // Normaliza para 0-1
-            gsap.set(scrollingElement, { x: `${moveProgress * 74}%` });
+            
+            // Começar de fora da tela (left = -cardWidth = -100vw aproximadamente)
+            const startPercent = -100; // -100% do viewport (completamente fora à esquerda)
+            
+            // Interpolar de -100vw até targetPositionPercent (30% - cardWidth/2)
+            const currentPercent = startPercent + (moveProgress * (targetPositionPercent - startPercent));
+            
+            gsap.set(scrollingElement, { x: `${currentPercent}vw` });
+            console.log(`📍 FASE 1: progress=${(progress*100).toFixed(1)}% | moveProgress=${(moveProgress*100).toFixed(1)}% | x=${currentPercent.toFixed(1)}vw`);
           } 
-          // FASE 2 (53% → 100%): Vídeo fixo no centro
+          // FASE 2 (53% → 100%): Vídeo fixo com linha azul na linha amarela (30%)
           else {
-            gsap.set(scrollingElement, { x: "74%" }); // Mantém fixo no centro (2/3 da tela)
+            gsap.set(scrollingElement, { x: `${targetPositionPercent}vw` });
+            console.log(`📍 FASE 2: progress=${(progress*100).toFixed(1)}% | x=${targetPositionPercent.toFixed(1)}vw (TRAVADO)`);
           }
         },
         onLeave: () => {
@@ -296,27 +516,31 @@ const About = () => {
 
   return (
     <Section ref={ref} id="about">
-      <Title data-scroll data-scroll-speed="-2">
-      </Title>
-      <TextContainer>
-        <h2>Sobre</h2>
-        <p>
-          O Memorial Garden é o único cemitério modelo parque da região de Ourinhos,
-          projetado para oferecer um ambiente sereno, acolhedor e em harmonia com a natureza.
-          <br /> <br />
-          Com 14 anos de história, nos dedicamos a preservar memórias e homenagear vidas
-          com dignidade e respeito. Nossos jardins cuidadosamente planejados proporcionam
-          um espaço de paz e tranquilidade para as famílias.
-        </p>
-      </TextContainer>
-      <VideoContainer data-scroll ref={Horizontalref}>
-        <Media 
-          ref={videoRef}
-          type="video" 
-          src="/videos/video-institucional.mp4" 
-          title=""
-        />
-      </VideoContainer>
+      <ContentWrapper>
+        {/* <DivisorLine1 /> */}
+        {/* <DivisorLine2 /> */}
+        {/* <CenterLine /> */}
+        <VideoContainer ref={Horizontalref}>
+          <Media 
+            ref={videoRef}
+            type="video" 
+            src="/videos/video-institucional.mp4" 
+            title=""
+          />
+        </VideoContainer>
+        <TextContainer>
+          <h2>O Memorial</h2>
+          <p>
+            <br /> <br />
+            O Memorial Garden é o único cemitério modelo parque da região de Ourinhos,
+            projetado para oferecer um ambiente sereno, acolhedor e em harmonia com a natureza.
+            <br /> <br />
+            Com 14 anos de história, nos dedicamos a preservar memórias e homenagear vidas
+            com dignidade e respeito. Nossos jardins cuidadosamente planejados proporcionam
+            um espaço de paz e tranquilidade para as famílias.
+          </p>
+        </TextContainer>
+      </ContentWrapper>
     </Section>
   );
 };
