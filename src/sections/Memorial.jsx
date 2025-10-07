@@ -36,27 +36,6 @@ const ContentWrapper = styled.div`
   }
 `;
 
-const Title = styled.h1`
-  font-size: ${(props) => props.theme.fontxxxl};
-  font-family: "Kaushan Script";
-  font-weight: 300;
-  color: ${(props) => props.theme.text};
-  text-shadow: 1px 1px 1px ${(props) => props.theme.body};
-
-  position: absolute;
-  top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 11;
-
-  @media (max-width: 64em) {
-    font-size: ${(props) => props.theme.fontxxl};
-  }
-  @media (max-width: 48em) {
-    font-size: ${(props) => props.theme.fontxl};
-  }
-`;
-
 const TextContainer = styled.div`
   width: 40%; /* Ajustado para 40% para igualar visualmente ao Nosso Espaço */
   height: 100vh;
@@ -252,21 +231,21 @@ const About = () => {
       
       let { targetPositionPercent } = recalculate();
       
-      // ✅ IMPORTANTE: Posicionar vídeo fora da tela (-100vw) ANTES de criar o ScrollTrigger
-      gsap.set(scrollingElement, { x: '-100vw' });
-      console.log('✅ Vídeo posicionado em -100vw (fora da tela)');
+      // ✅ IMPORTANTE: Posicionar vídeo 20% mais próximo para iniciar movimento mais cedo
+      const initialOffset = 0.2; // 20% do progresso já "andado"
+      const initialPosition = -70 + (initialOffset * (targetPositionPercent - (-100)));
+      gsap.set(scrollingElement, { x: `${initialPosition}vw` });
       
       // Recalcular em resize
       window.addEventListener('resize', () => {
         const result = recalculate();
         targetPositionPercent = result.targetPositionPercent;
-        console.log('Recalculated target position:', targetPositionPercent, '%');
       });
       
       // ScrollTrigger com pin que controla o movimento
       ScrollTrigger.create({
         trigger: element,
-        start: "top top",
+        start: "top top", // ← AQUI está o início da animação
         end: `+=${totalDistance}`, // Total: 1900px (1000 movimento + 900 hold)
         scroller: ".App",
         pin: true,
@@ -279,31 +258,29 @@ const About = () => {
           if (progress < movePhaseRatio) {
             let moveProgress = progress / movePhaseRatio; // Normaliza para 0-1
             
-            // Começar de fora da tela (left = -cardWidth = -100vw aproximadamente)
-            const startPercent = -100; // -100% do viewport (completamente fora à esquerda)
+            // Ajustar progresso considerando que já começamos 20% adiantado
+            // Quando moveProgress = 0, queremos que o vídeo já esteja 20% do caminho
+            // Então adjustedProgress = moveProgress + initialOffset
+            const adjustedProgress = Math.min(1, moveProgress + initialOffset);
             
-            // Interpolar de -100vw até targetPositionPercent (30% - cardWidth/2)
-            const currentPercent = startPercent + (moveProgress * (targetPositionPercent - startPercent));
+            // Interpolar da posição inicial até targetPositionPercent
+            const currentPercent = initialPosition + (adjustedProgress * (targetPositionPercent - initialPosition));
             
             gsap.set(scrollingElement, { x: `${currentPercent}vw` });
-            console.log(`📍 FASE 1: progress=${(progress*100).toFixed(1)}% | moveProgress=${(moveProgress*100).toFixed(1)}% | x=${currentPercent.toFixed(1)}vw`);
           } 
           // FASE 2 (53% → 100%): Vídeo fixo na posição alvo (30% viewport)
           else {
             gsap.set(scrollingElement, { x: `${targetPositionPercent}vw` });
-            console.log(`📍 FASE 2: progress=${(progress*100).toFixed(1)}% | x=${targetPositionPercent.toFixed(1)}vw (TRAVADO)`);
           }
         },
         onLeave: () => {
           // Quando o end vermelho (fim do pin) passar pelo topo da viewport
-          console.log('End marker passou pelo start - mutando vídeo');
           if (videoRef.current && !videoRef.current.paused) {
             videoRef.current.muted = true;
           }
         },
         onEnterBack: () => {
           // Quando voltar para dentro da área do pin
-          console.log('Voltou para área do pin - desmutando vídeo');
           if (videoRef.current && !videoRef.current.paused) {
             videoRef.current.muted = false;
           }

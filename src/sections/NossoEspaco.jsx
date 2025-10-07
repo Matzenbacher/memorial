@@ -31,7 +31,7 @@ const Section = styled(motion.section)`
 
   position: relative;
 
-  /* background-color: orange; */
+  background-color: ${(props) => props.theme.grey};
 `;
 
 const Left = styled.div`

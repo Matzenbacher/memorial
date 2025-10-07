@@ -47,9 +47,6 @@ const Section = styled(motion.section)`
   position: relative;
   background: ${(props) => props.theme.body};
   padding-top: 5rem;
-  
-  /* Espaçamento extra para evitar conflito com pin anterior */
-  margin-top: 2rem;
 `;
 
 const CardsContainer = styled.div`
@@ -229,7 +226,7 @@ const NewArrival = () => {
 
     if (!element || !scrollingElement) return;
 
-    let pinDuration = 1500; // Reduzido de 2000 para 1500 para evitar conflito
+    let pinDuration = 2000; // Ajustado para 2000 para eliminar espaço entre seções
 
     setTimeout(() => {
       // Verificar se é mobile (desabilita animação GSAP)
