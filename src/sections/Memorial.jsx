@@ -36,110 +36,6 @@ const ContentWrapper = styled.div`
   }
 `;
 
-/* const DivisorLine1 = styled.div`
-  // Primeira linha divisória - marca 30% (meio de 60%)
-  position: absolute;
-  left: 30%;
-  top: 0;
-  bottom: 0;
-  width: 8px;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    #FFD700 0px,
-    #FFD700 20px,
-    transparent 20px,
-    transparent 40px
-  );
-  transform: translateX(-4px);
-  z-index: 100;
-  opacity: 0.9;
-  pointer-events: none;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-  
-  &::after {
-    content: '30%';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #FFD700;
-    color: #000;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 18px;
-    white-space: nowrap;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  }
-  
-  @media (max-width: 48em) {
-    display: none;
-  }
-`; */
-
-/* const DivisorLine2 = styled.div`
-  // Segunda linha divisória - marca 60% (fim do vídeo/início do texto)
-  position: absolute;
-  left: 60%;
-  top: 0;
-  bottom: 0;
-  width: 8px;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    #00FF00 0px,
-    #00FF00 20px,
-    transparent 20px,
-    transparent 40px
-  );
-  transform: translateX(-4px);
-  z-index: 100;
-  opacity: 0.9;
-  pointer-events: none;
-  box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
-  
-  &::after {
-    content: '60%';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #00FF00;
-    color: #000;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 18px;
-    white-space: nowrap;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  }
-  
-  @media (max-width: 48em) {
-    display: none;
-  }
-`; */
-
-/* const CenterLine = styled.div`
-  // Linha rosa no meio de 60% (30%) - objetivo final do vídeo
-  position: absolute;
-  left: 30%;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: linear-gradient(to bottom, 
-    #FF3984 0%, 
-    #6C20AF 50%, 
-    #FF3984 100%);
-  transform: translateX(-2px);
-  z-index: 101;
-  opacity: 0.9;
-  pointer-events: none;
-  box-shadow: 0 0 12px rgba(255, 57, 132, 0.6);
-  
-  @media (max-width: 48em) {
-    display: none;
-  }
-`; */
-
 const Title = styled.h1`
   font-size: ${(props) => props.theme.fontxxxl};
   font-family: "Kaushan Script";
@@ -162,7 +58,7 @@ const Title = styled.h1`
 `;
 
 const TextContainer = styled.div`
-  width: 35%; /* 35% da tela - igual ao Shop */
+  width: 40%; /* Ajustado para 40% para igualar visualmente ao Nosso Espaço */
   height: 100vh;
   background-color: ${(props) => props.theme.body};
   color: ${(props) => props.theme.text};
@@ -178,7 +74,7 @@ const TextContainer = styled.div`
   padding: 2rem;
 
   @media (max-width: 64em) {
-    width: 40%;
+    width: 45%; /* Ajustado para 45% em tablet */
   }
 
   @media (max-width: 48em) {
@@ -194,7 +90,7 @@ const TextContainer = styled.div`
 `;
 
 const VideoContainer = styled.div`
-  width: 65%; /* 65% da tela - complemento de 35% do texto */
+  width: 60%; /* Ajustado para 60% para compensar o TextContainer */
   height: 100vh;
   background-color: ${(props) => props.theme.grey};
   position: relative;
@@ -204,25 +100,6 @@ const VideoContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  
-  /* Linha roxa marca onde o centro do card do vídeo deve ficar */
-  /* &::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: linear-gradient(to bottom, 
-      ${(props) => props.theme.primary} 0%, 
-      ${(props) => props.theme.accent} 50%, 
-      ${(props) => props.theme.primary} 100%);
-    transform: translateX(-1.5px);
-    z-index: 6;
-    opacity: 0.8;
-    pointer-events: none;
-    box-shadow: 0 0 10px rgba(108, 32, 175, 0.5);
-  } */
   
   @media (max-width: 48em) {
     width: 100%;
@@ -240,25 +117,6 @@ const Item = styled(motion.div)`
   width: 37rem;
   flex-shrink: 0;
   position: relative;
-  
-  /* Linha azul no centro do card do vídeo */
-  /* &::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: linear-gradient(to bottom, 
-      #00BFFF 0%, 
-      #1E90FF 50%, 
-      #00BFFF 100%);
-    transform: translateX(-1.5px);
-    z-index: 10;
-    opacity: 0.8;
-    pointer-events: none;
-    box-shadow: 0 0 10px rgba(30, 144, 255, 0.6);
-  } */
   
   video {
     width: 100%;
@@ -376,11 +234,11 @@ const About = () => {
         const videoCard = scrollingElement.querySelector('.media-item');
         const videoCardWidth = videoCard?.offsetWidth || 592;
         
-        // Como o vídeo está no container esquerdo (65% da tela), queremos que o centro
+        // Como o vídeo está no container esquerdo (60% da tela), queremos que o centro
         // do vídeo fique aproximadamente no meio do container esquerdo
-        // Container esquerdo: 0% a 65% do viewport
-        // Centro do container esquerdo: 65% / 2 = 32.5%
-        const targetViewportPercent = 0.325; // 32.5% do viewport
+        // Container esquerdo: 0% a 60% do viewport
+        // Centro do container esquerdo: 60% / 2 = 30%
+        const targetViewportPercent = 0.30; // 30% do viewport
         
         // Centro do card deve ficar em targetViewportPercent do viewport
         const targetPositionPx = viewportWidth * targetViewportPercent;
@@ -388,15 +246,6 @@ const About = () => {
         
         // Converter para porcentagem do viewport
         const targetPositionPercent = (leftDoCard / viewportWidth) * 100;
-        
-        console.log('🎯 Target ajustado (vídeo na esquerda):', {
-          viewport: viewportWidth,
-          targetViewportPercent: (targetViewportPercent * 100) + '%',
-          targetPositionPx: targetPositionPx + 'px',
-          cardWidth: videoCardWidth,
-          leftDoCard: leftDoCard + 'px',
-          targetPercent: targetPositionPercent.toFixed(2) + '% do viewport'
-        });
         
         return { targetPositionPercent };
       };
@@ -422,25 +271,24 @@ const About = () => {
         scroller: ".App",
         pin: true,
         scrub: 1,
-        markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 },
         id: "pin-movement",
         onUpdate: (self) => {
           let progress = self.progress;
           
-          // FASE 1 (0% → ~53%): Vídeo entra da esquerda até posição alvo (32.5% viewport)
+          // FASE 1 (0% → ~53%): Vídeo entra da esquerda até posição alvo (30% viewport)
           if (progress < movePhaseRatio) {
             let moveProgress = progress / movePhaseRatio; // Normaliza para 0-1
             
             // Começar de fora da tela (left = -cardWidth = -100vw aproximadamente)
             const startPercent = -100; // -100% do viewport (completamente fora à esquerda)
             
-            // Interpolar de -100vw até targetPositionPercent (32.5% - cardWidth/2)
+            // Interpolar de -100vw até targetPositionPercent (30% - cardWidth/2)
             const currentPercent = startPercent + (moveProgress * (targetPositionPercent - startPercent));
             
             gsap.set(scrollingElement, { x: `${currentPercent}vw` });
             console.log(`📍 FASE 1: progress=${(progress*100).toFixed(1)}% | moveProgress=${(moveProgress*100).toFixed(1)}% | x=${currentPercent.toFixed(1)}vw`);
           } 
-          // FASE 2 (53% → 100%): Vídeo fixo na posição alvo (32.5% viewport)
+          // FASE 2 (53% → 100%): Vídeo fixo na posição alvo (30% viewport)
           else {
             gsap.set(scrollingElement, { x: `${targetPositionPercent}vw` });
             console.log(`📍 FASE 2: progress=${(progress*100).toFixed(1)}% | x=${targetPositionPercent.toFixed(1)}vw (TRAVADO)`);

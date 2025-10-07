@@ -3,7 +3,7 @@ import React from "react";
 import { useLocomotiveScroll } from "react-locomotive-scroll";
 import styled from "styled-components";
 
-import Logo from "../assets/Svgs/star_white_48dp.svg";
+import Logo from "../assets/Images/logo.webp";
 
 const Section = styled.section`
   min-height: 100vh;
@@ -31,10 +31,10 @@ const LogoContainer = styled.div`
   margin-bottom: 2rem;
 
   img {
-    width: 10vw;
+    width: 15vw;
     height: auto;
-    min-width: 80px;
-    max-width: 150px;
+    min-width: 120px;
+    max-width: 200px;
   }
 
   h3 {

@@ -49,30 +49,7 @@ const Section = styled(motion.section)`
   padding-top: 5rem;
   
   /* Espaçamento extra para evitar conflito com pin anterior */
-  //margin-top: 2rem;
-  
-  /* Linha vermelha no centro do viewport (50%) - DEBUG */
-  &::before {
-    content: '';
-    position: fixed;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: linear-gradient(to bottom, 
-      #FF0000 0%, 
-      #FF3984 50%, 
-      #FF0000 100%);
-    transform: translateX(-2px);
-    z-index: 1000;
-    opacity: 0.9;
-    pointer-events: none;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
-    
-    @media (max-width: 48em) {
-      display: none;
-    }
-  }
+  margin-top: 2rem;
 `;
 
 const CardsContainer = styled.div`
@@ -83,29 +60,6 @@ const CardsContainer = styled.div`
   align-items: center;
   position: relative;
   gap: 2.5rem; /* Espaçamento entre cards */
-  
-  /* Linha azul no centro do container dos cards - DEBUG */
-  &::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: linear-gradient(to bottom, 
-      #0000FF 0%, 
-      #6C20AF 50%, 
-      #0000FF 100%);
-    transform: translateX(-2px);
-    z-index: 1001;
-    opacity: 0.9;
-    pointer-events: none;
-    box-shadow: 0 0 15px rgba(0, 0, 255, 0.6);
-    
-    @media (max-width: 48em) {
-      display: none;
-    }
-  }
 
   @media (max-width: 64em) {
     gap: 2rem;
@@ -279,58 +233,41 @@ const NewArrival = () => {
 
     setTimeout(() => {
       // Verificar se é mobile (desabilita animação GSAP)
-      const isMobile = window.innerWidth <= 768; // 48em = 768px
+      const isMobile = window.innerWidth <= 768;
       
       if (isMobile) {
-        console.log('📱 Mobile detected - usando scroll nativo');
         return; // Não criar ScrollTrigger em mobile
       }
       
-      // 🎯 SIMPLES: Linha vermelha = 50% viewport | Linha azul = centro do container
       // Queremos: centro do container em 50% do viewport SEMPRE
       const recalculate = () => {
         const viewportWidth = window.innerWidth;
         const containerWidth = scrollingElement.offsetWidth;
         
-        // Linha vermelha está SEMPRE em 50% do viewport (em pixels)
-        const linhaVermelhaEmPx = viewportWidth * 0.5;
-        
         // Centro do container deve ficar em 50% do viewport
         // Se o container tem left=0 inicialmente, seu centro está em containerWidth/2
         // Para mover o centro para 50% do viewport:
         // left do container = 50%viewport - containerWidth/2
-        const leftDoContainer = linhaVermelhaEmPx - (containerWidth / 2);
+        const leftDoContainer = viewportWidth * 0.5 - (containerWidth / 2);
         
-        // 🔧 AJUSTE: Mover mais para a esquerda (valores negativos = esquerda)
-        const ajusteEsquerda = -140; // -50px para a esquerda
+        // Ajuste para mover mais para a esquerda
+        const ajusteEsquerda = -140;
         
-        // Converter para porcentagem do viewport (não do container!)
+        // Converter para porcentagem do viewport
         const targetPositionPercent = ((leftDoContainer + ajusteEsquerda) / viewportWidth) * 100;
-        
-        console.log('🎯 Diferenciais - Posições calculadas:', {
-          viewport: viewportWidth + 'px',
-          linhaVermelha: linhaVermelhaEmPx + 'px (50% viewport)',
-          containerWidth: containerWidth + 'px',
-          leftDoContainer: leftDoContainer + 'px',
-          ajusteEsquerda: ajusteEsquerda + 'px',
-          targetPercent: targetPositionPercent.toFixed(2) + '% do viewport'
-        });
         
         return { targetPositionPercent };
       };
       
       let { targetPositionPercent } = recalculate();
       
-      // ✅ IMPORTANTE: Posicionar cards fora da tela (100vw) ANTES de criar o ScrollTrigger
+      // Posicionar cards fora da tela antes de criar o ScrollTrigger
       gsap.set(scrollingElement, { x: '100vw' });
-      console.log('✅ Cards posicionados em 100vw (fora da tela à direita)');
-      console.log('🎯 Vão para:', targetPositionPercent.toFixed(2), 'vw (centro alinhado)');
       
       // Recalcular em resize
       window.addEventListener('resize', () => {
         const result = recalculate();
         targetPositionPercent = result.targetPositionPercent;
-        console.log('♻️ Recalculado target position:', targetPositionPercent.toFixed(2), 'vw');
       });
       
       // ScrollTrigger: anima continuamente de 100vw até targetPositionPercent
@@ -341,7 +278,6 @@ const NewArrival = () => {
         scroller: ".App",
         pin: true,
         scrub: 1,
-        markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 },
         id: "pin-diferenciais",
         onUpdate: (self) => {
           let progress = self.progress; // 0 → 1
@@ -353,10 +289,6 @@ const NewArrival = () => {
           const currentPercent = startPercent + (progress * (targetPositionPercent - startPercent));
           
           gsap.set(scrollingElement, { x: `${currentPercent}vw` });
-          
-          if (progress === 0 || progress === 1 || Math.abs(progress - 0.5) < 0.01) {
-            console.log(`📍 progress=${(progress*100).toFixed(1)}% | x=${currentPercent.toFixed(2)}vw | target=${targetPositionPercent.toFixed(2)}vw`);
-          }
         }
       });
       
