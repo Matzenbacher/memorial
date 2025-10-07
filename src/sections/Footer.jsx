@@ -87,9 +87,6 @@ const FooterComponent = styled(motion.footer)`
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s ease;
-    &:hover {
-      transform: scale(1.1);
-    }
 
     @media (max-width: 48em) {
       padding: 1rem;
@@ -160,40 +157,53 @@ const Footer = () => {
           data-scroll-speed="2"
         />
         <h3 data-scroll data-scroll-speed="-1">
-          Memorial Garden
         </h3>
       </LogoContainer>
       <FooterComponent
-        initial={{ y: "-400px" }}
+        initial={{ y: "-600px" }}
         whileInView={{ y: 0 }}
         viewport={{ once: false }}
         transition={{
-          duration: 1.5,
+          duration: 2.5,
         }}
       >
         <ul>
-          <li aria-hidden="true" onClick={() => handleScroll("#home")}>
+          <motion.li
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.9, y: 0 }}
+            onClick={() => handleScroll("#home")}
+          >
             Início
-          </li>
-          <li aria-hidden="true" onClick={() => handleScroll(".about")}>
+          </motion.li>
+          <motion.li
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.9, y: 0 }}
+            onClick={() => handleScroll("#about")}
+          >
             Sobre
-          </li>
-          <li aria-hidden="true" onClick={() => handleScroll("#shop")}>
+          </motion.li>
+          <motion.li
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.9, y: 0 }}
+            onClick={() => handleScroll("#shop")}
+          >
             Nosso Espaço
-          </li>
-          <li aria-hidden="true" onClick={() => handleScroll(".new-arrival")}>
+          </motion.li>
+          <motion.li
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.9, y: 0 }}
+            onClick={() => handleScroll(".new-arrival")}
+          >
             Diferenciais
-          </li>
-          <li>
-            <a href="https://wa.me/5514998811397" target={"_blank"} rel="noreferrer">
-              WhatsApp
-            </a>
-          </li>
-          <li>
+          </motion.li>
+          <motion.li
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.9, y: 0 }}
+          >
             <a href="https://instagram.com/memorial.garden" target={"_blank"} rel="noreferrer">
               Instagram
             </a>
-          </li>
+          </motion.li>
         </ul>
         <Bottom>
           <span

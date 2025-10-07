@@ -21,15 +21,15 @@ const Container = styled.div`
   }
 
   img {
-    width: 4rem;
+    width: 4.6rem;
     height: auto;
     
     @media (max-width: 48em) {
-      width: 3rem;
+      width: 3.45rem;
     }
     
     @media (max-width: 30em) {
-      width: 2.5rem;
+      width: 2.875rem;
     }
   }
 `;

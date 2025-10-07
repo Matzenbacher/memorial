@@ -226,7 +226,10 @@ const NewArrival = () => {
 
     if (!element || !scrollingElement) return;
 
-    let pinDuration = 2000; // Ajustado para 2000 para eliminar espaço entre seções
+    let scrollDistance = 1500; // Fase 1: movimento dos cards até o centro
+    let holdDistance = 500;    // Fase 2: tempo segurado no centro
+    let totalDistance = scrollDistance + holdDistance; // Total do pin
+    let movePhaseRatio = scrollDistance / totalDistance;
 
     setTimeout(() => {
       // Verificar se é mobile (desabilita animação GSAP)
@@ -270,8 +273,8 @@ const NewArrival = () => {
       // ScrollTrigger: anima continuamente de 100vw até targetPositionPercent
       ScrollTrigger.create({
         trigger: element,
-        start: "top top", // Mudou de "top-=300 top" para "top top"
-        end: `+=${pinDuration}`,
+        start: "top top",
+        end: `+=${totalDistance}`,
         scroller: ".App",
         pin: true,
         scrub: 1,
@@ -279,13 +282,19 @@ const NewArrival = () => {
         onUpdate: (self) => {
           let progress = self.progress; // 0 → 1
           
-          // Começar de fora da tela (right = 100vw)
-          const startPercent = 100;
-          
-          // Interpolar de 100vw até targetPositionPercent
-          const currentPercent = startPercent + (progress * (targetPositionPercent - startPercent));
-          
-          gsap.set(scrollingElement, { x: `${currentPercent}vw` });
+          // FASE 1 (0% → ~60%): Cards entram da direita até posição alvo (centro)
+          if (progress < movePhaseRatio) {
+            let moveProgress = progress / movePhaseRatio; // Normaliza para 0-1
+            
+            // Interpolar de 100vw até targetPositionPercent
+            const currentPercent = 100 + (moveProgress * (targetPositionPercent - 100));
+            
+            gsap.set(scrollingElement, { x: `${currentPercent}vw` });
+          } 
+          // FASE 2 (60% → 100%): Cards fixos no centro
+          else {
+            gsap.set(scrollingElement, { x: `${targetPositionPercent}vw` });
+          }
         }
       });
       

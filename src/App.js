@@ -7,6 +7,7 @@ import { ThemeProvider } from "styled-components";
 
 import Loader from "./components/Loader";
 import ScrollTriggerProxy from "./components/ScrollTriggerProxy";
+import WhatsAppButton from "./components/WhatsAppButton";
 import Memorial from "./sections/Memorial";
 import Footer from "./sections/Footer";
 import Home from "./sections/Home";
@@ -64,6 +65,7 @@ function App() {
             </AnimatePresence>
           </main>
         </LocomotiveScrollProvider>
+        <WhatsAppButton />
       </ThemeProvider>
     </>
   );

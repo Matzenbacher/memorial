@@ -27,15 +27,15 @@ const Container = styled(motion.div)`
 `;
 
 const LogoImage = styled(motion.img)`
-  width: 25vw;
+  width: 20vw;
   height: auto;
   
   @media (max-width: 48em) {
-    width: 45vw;
+    width: 36vw;
   }
   
   @media (max-width: 30em) {
-    width: 60vw;
+    width: 48vw;
   }
 `;
 

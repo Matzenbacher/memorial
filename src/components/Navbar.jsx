@@ -135,37 +135,41 @@ const Navbar = () => {
         <MenuBtn onClick={() => setClick(!click)}>
           <span>MENU</span>
         </MenuBtn>
-        <Item
-          whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, y: 0 }}
-          onClick={() => handleScroll('#home')}
-        >
-          {' '}
-          <Link to="/">Início</Link>
-        </Item>
-        <Item
-          whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, y: 0 }}
-          onClick={() => handleScroll('.about')}
-        >
-          <Link to="/">Sobre</Link>
-        </Item>
-        <Item
-          whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, y: 0 }}
-          onClick={() => handleScroll('#shop')}
-        >
-          <Link to="/">Espaço</Link>
-        </Item>
-
-        <Item
-          whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, y: 0 }}
-          onClick={() => handleScroll('.new-arrival')}
-        >
-          {' '}
-          <Link to="/">Diferenciais</Link>
-        </Item>
+          <Item
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.9, y: 0 }}
+            onClick={() => handleScroll('#home')}
+          >
+            <Link to="/">Início</Link>
+          </Item>
+          <Item
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.9, y: 0 }}
+            onClick={() => handleScroll('#nosso-espaco')}
+          >
+            <Link to="/">Nosso Espaço</Link>
+          </Item>
+          <Item
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.9, y: 0 }}
+            onClick={() => handleScroll('#memorial')}
+          >
+            <Link to="/">Memorial</Link>
+          </Item>
+          <Item
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.9, y: 0 }}
+            onClick={() => handleScroll('.new-arrival')}
+          >
+            <Link to="/">Diferenciais</Link>
+          </Item>
+          <Item
+            whileHover={{ scale: 1.1, y: -5 }}
+            whileTap={{ scale: 0.9, y: 0 }}
+            onClick={() => handleScroll('#footer')}
+          >
+            <Link to="/">Contato</Link>
+          </Item>
       </MenuItems>
     </NavContainer>
   );

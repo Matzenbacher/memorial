@@ -219,8 +219,8 @@ const Shop = () => {
   return (
     <Section ref={ref} id="shop">
       <Left>
-        <SectionTitle>Nosso Espaço</SectionTitle>
-        <br /> <br />
+        <SectionTitle data-scroll data-scroll-speed="-1">Nosso Espaço</SectionTitle>
+        <br /> <br /> <br />
         <SectionParagraph>
           O Memorial Garden é o único cemitério modelo parque da região de Ourinhos, 
           projetado para oferecer um ambiente sereno e acolhedor. Nossa estrutura 
