@@ -3,6 +3,7 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import React, { useLayoutEffect, useRef } from "react";
 import styled from "styled-components";
+import { SectionTitle, SectionParagraph } from '../styles/SharedComponents';
 
 import img1 from "../assets/Images/1.webp";
 import img2 from "../assets/Images/2.webp";
@@ -49,37 +50,8 @@ const Left = styled.div`
   align-items: flex-start;
   padding: 2rem;
 
-  h2 {
-    font-size: ${(props) => props.theme.fontxxl};
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    color: ${(props) => props.theme.primary};
-    margin-bottom: 2rem;
-    text-align: center;
-    width: 100%;
-  }
-
-  p {
-    font-size: ${(props) => props.theme.fontlg};
-    font-weight: 300;
-    width: 80%;
-    margin: 0 auto;
-    line-height: 1.6;
-    text-align: justify;
-  }
-
   @media (max-width: 64em) {
     width: 40%;
-    
-    h2 {
-      font-size: ${(props) => props.theme.fontxl};
-      margin-bottom: 1.5rem;
-    }
-    
-    p {
-      font-size: ${(props) => props.theme.fontmd};
-      width: 90%;
-    }
   }
 
   @media (max-width: 48em) {
@@ -87,28 +59,10 @@ const Left = styled.div`
     position: relative;
     min-height: auto;
     padding: 3rem 2rem;
-    
-    h2 {
-      font-size: ${(props) => props.theme.fontlg};
-    }
-    
-    p {
-      font-size: ${(props) => props.theme.fontsm};
-      width: 100%;
-    }
   }
   
   @media (max-width: 30em) {
     padding: 2rem 1rem;
-    
-    h2 {
-      font-size: ${(props) => props.theme.fontmd};
-      margin-bottom: 1rem;
-    }
-    
-    p {
-      font-size: ${(props) => props.theme.fontxs};
-    }
   }
 `;
 const Right = styled.div`
@@ -265,9 +219,9 @@ const Shop = () => {
   return (
     <Section ref={ref} id="shop">
       <Left>
-        <h2>Nosso Espaço</h2>
+        <SectionTitle>Nosso Espaço</SectionTitle>
         <br /> <br />
-        <p>
+        <SectionParagraph>
           O Memorial Garden é o único cemitério modelo parque da região de Ourinhos, 
           projetado para oferecer um ambiente sereno e acolhedor. Nossa estrutura 
           privilegia a harmonia com a natureza, proporcionando um espaço de paz e 
@@ -277,7 +231,7 @@ const Shop = () => {
           dignidade de cada momento, criamos um lugar onde memórias podem ser 
           preservadas com carinho e respeito. Cada detalhe foi pensado para transmitir 
           conforto e serenidade às famílias.
-        </p>
+        </SectionParagraph>
       </Left>
       <Right data-scroll ref={Horizontalref}>
         <Product img={img1} title="Ambiente" />

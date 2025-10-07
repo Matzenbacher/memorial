@@ -3,6 +3,7 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import React, { useLayoutEffect, useRef } from "react";
 import styled from "styled-components";
+import { SectionTitle, SectionParagraph } from '../styles/SharedComponents';
 
 const Section = styled(motion.section)`
   min-height: 100vh;
@@ -161,7 +162,7 @@ const Title = styled.h1`
 `;
 
 const TextContainer = styled.div`
-  width: 40%; /* 40% da tela */
+  width: 35%; /* 35% da tela - igual ao Shop */
   height: 100vh;
   background-color: ${(props) => props.theme.body};
   color: ${(props) => props.theme.text};
@@ -176,37 +177,8 @@ const TextContainer = styled.div`
   align-items: flex-start;
   padding: 2rem;
 
-  h2 {
-    font-size: ${(props) => props.theme.fontxxl};
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    color: ${(props) => props.theme.primary};
-    margin-bottom: 2rem;
-    text-align: center;
-    width: 100%;
-  }
-
-  p {
-    font-size: ${(props) => props.theme.fontlg};
-    font-weight: 300;
-    width: 80%;
-    margin: 0 auto;
-    line-height: 1.6;
-    text-align: justify;
-  }
-
   @media (max-width: 64em) {
     width: 40%;
-    
-    h2 {
-      font-size: ${(props) => props.theme.fontxl};
-      margin-bottom: 1.5rem;
-    }
-    
-    p {
-      font-size: ${(props) => props.theme.fontmd};
-      width: 90%;
-    }
   }
 
   @media (max-width: 48em) {
@@ -214,33 +186,15 @@ const TextContainer = styled.div`
     position: relative;
     min-height: auto;
     padding: 3rem 2rem;
-    
-    h2 {
-      font-size: ${(props) => props.theme.fontlg};
-    }
-    
-    p {
-      font-size: ${(props) => props.theme.fontsm};
-      width: 100%;
-    }
   }
   
   @media (max-width: 30em) {
     padding: 2rem 1rem;
-    
-    h2 {
-      font-size: ${(props) => props.theme.fontmd};
-      margin-bottom: 1rem;
-    }
-    
-    p {
-      font-size: ${(props) => props.theme.fontxs};
-    }
   }
 `;
 
 const VideoContainer = styled.div`
-  width: 60%; /* 60% da tela */
+  width: 65%; /* 65% da tela - complemento de 35% do texto */
   height: 100vh;
   background-color: ${(props) => props.theme.grey};
   position: relative;
@@ -520,6 +474,18 @@ const About = () => {
         {/* <DivisorLine1 /> */}
         {/* <DivisorLine2 /> */}
         {/* <CenterLine /> */}
+        <TextContainer>
+          <SectionTitle>O Memorial</SectionTitle>
+          <SectionParagraph>
+            <br /> <br />
+            O Memorial Garden é o único cemitério modelo parque da região de Ourinhos,
+            projetado para oferecer um ambiente sereno, acolhedor e em harmonia com a natureza.
+            <br /> <br />
+            Com 14 anos de história, nos dedicamos a preservar memórias e homenagear vidas
+            com dignidade e respeito. Nossos jardins cuidadosamente planejados proporcionam
+            um espaço de paz e tranquilidade para as famílias.
+          </SectionParagraph>
+        </TextContainer>
         <VideoContainer ref={Horizontalref}>
           <Media 
             ref={videoRef}
@@ -528,18 +494,6 @@ const About = () => {
             title=""
           />
         </VideoContainer>
-        <TextContainer>
-          <h2>O Memorial</h2>
-          <p>
-            <br /> <br />
-            O Memorial Garden é o único cemitério modelo parque da região de Ourinhos,
-            projetado para oferecer um ambiente sereno, acolhedor e em harmonia com a natureza.
-            <br /> <br />
-            Com 14 anos de história, nos dedicamos a preservar memórias e homenagear vidas
-            com dignidade e respeito. Nossos jardins cuidadosamente planejados proporcionam
-            um espaço de paz e tranquilidade para as famílias.
-          </p>
-        </TextContainer>
       </ContentWrapper>
     </Section>
   );
