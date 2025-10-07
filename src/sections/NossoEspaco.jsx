@@ -18,19 +18,34 @@ import img10 from "../assets/Images/10.webp";
 import img11 from "../assets/Images/11.webp";
 import img12 from "../assets/Images/12.webp";
 
+// SectionTitle & SectionParagraph overrides for this section on mobile
+const Title = styled(SectionTitle)`
+  @media (max-width: 48em) {
+    font-size: ${(props) => props.theme.fontxxl};
+  }
+`;
+const Paragraph = styled(SectionParagraph)`
+  @media (max-width: 48em) {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+  }
+`;
+
 const Section = styled(motion.section)`
   min-height: 100vh;
   height: auto;
-  /* width: 80vw; */
   width: 100%;
   margin: 0 auto;
   overflow: hidden;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-
   position: relative;
 
+  @media (max-width: 48em) {
+    flex-direction: column;  // empilha Left e Right verticalmente
+  }
   background-color: ${(props) => props.theme.grey};
 `;
 
@@ -50,17 +65,15 @@ const Left = styled.div`
   align-items: flex-start;
   padding: 2rem;
 
-  @media (max-width: 64em) {
-    width: 40%;
-  }
-
+    
   @media (max-width: 48em) {
     width: 100%;
     position: relative;
     min-height: auto;
     padding: 3rem 2rem;
+    text-align: center;
   }
-  
+
   @media (max-width: 30em) {
     padding: 2rem 1rem;
   }
@@ -69,7 +82,7 @@ const Right = styled.div`
   position: absolute;
   left: 35%;
   padding-left: 30%;
-  background-color: ${(props) => props.theme.grey};
+  background-color: ${props => props.theme.grey};
   min-height: 100vh;
 
   display: flex;
@@ -79,10 +92,14 @@ const Right = styled.div`
   @media (max-width: 48em) {
     position: relative;
     left: 0;
-    padding-left: 2rem;
+    padding: 2rem;
     width: 100%;
-    overflow-x: auto;
-    min-height: 60vh;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;  // empilha itens verticalmente
+    align-items: center;
+    overflow: hidden; // esconde overflow
+    gap: 2rem;      // espaçamento vertical
   }
 `;
 
@@ -91,7 +108,7 @@ const Item = styled(motion.div)`
   width: 20rem;
   margin-right: 6rem;
   flex-shrink: 0;
-  
+
   img {
     width: 100%;
     height: 30rem;
@@ -108,50 +125,19 @@ const Item = styled(motion.div)`
     font-size: ${(props) => props.theme.fontlg};
   }
 
-  @media (max-width: 64em) {
-    width: 18rem;
-    margin-right: 4rem;
-    
-    img {
-      height: 27rem;
-    }
-    
-    h1 {
-      font-size: ${(props) => props.theme.fontmd};
-    }
-  }
 
-  @media (max-width: 48em) {
-    width: 15rem;
-    margin-right: 3rem;
-    
-    img {
-      height: 22.5rem;
-    }
-    
+
+  @media (max-width: 30em) {
     h1 {
       font-size: ${(props) => props.theme.fontsm};
-    }
-  }
-  
-  @media (max-width: 30em) {
-    width: 12rem;
-    margin-right: 2rem;
-    
-    img {
-      height: 18rem;
-    }
-    
-    h1 {
-      font-size: ${(props) => props.theme.fontxs};
       margin-top: 0.5rem;
     }
   }
 `;
 const Product = ({ img, title = "" }) => {
   return (
-    // x: 100, y: -100
     <Item
+      className="gallery-item"
       initial={{ filter: "grayscale(100%)" }}
       whileInView={{ filter: "grayscale(0%)" }}
       transition={{ duration: 0.5 }}
@@ -171,57 +157,119 @@ const Shop = () => {
 
   useLayoutEffect(() => {
     let element = ref.current;
-
     let scrollingElement = Horizontalref.current;
 
-    let pinWrapWidth = scrollingElement.offsetWidth;
-    let t1 = gsap.timeline();
+    if (!element || !scrollingElement) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const mm = gsap.matchMedia();
 
     setTimeout(() => {
-      t1.to(element, {
-        scrollTrigger: {
-          trigger: element,
-          start: "top top",
-          end: `${pinWrapWidth} bottom`,
-          scroller: ".App", //locomotive-scroll
-          scrub: 1,
-          pin: true,
-          // markers: true,
-          // anticipatePin: 1,
-        },
-        height: `${scrollingElement.scrollWidth}px`,
-        ease: "none",
+      // 🖥️ DESKTOP: Scroll horizontal (min-width: 48em = 768px)
+      mm.add("(min-width: 48em)", () => {
+        let pinWrapWidth = scrollingElement.offsetWidth;
+        let t1 = gsap.timeline();
+
+        t1.to(element, {
+          scrollTrigger: {
+            trigger: element,
+            start: "top top",
+            end: `+=${pinWrapWidth}`,
+            scroller: ".App",
+            scrub: 1,
+            pin: true,
+            id: "nosso-espaco-pin-desktop",
+          },
+          height: `${scrollingElement.scrollWidth}px`,
+          ease: "none",
+        });
+
+        t1.to(scrollingElement, {
+          scrollTrigger: {
+            trigger: scrollingElement,
+            start: "top top",
+            end: `+=${pinWrapWidth}`,
+            scroller: ".App",
+            scrub: 1,
+            id: "nosso-espaco-scroll-desktop",
+          },
+          x: -pinWrapWidth,
+          ease: "none",
+        });
+
+        return () => {
+          t1.kill();
+          ScrollTrigger.getById("nosso-espaco-pin-desktop")?.kill();
+          ScrollTrigger.getById("nosso-espaco-scroll-desktop")?.kill();
+        };
       });
 
-      t1.to(scrollingElement, {
-        scrollTrigger: {
-          trigger: scrollingElement,
-          start: "top top",
-          end: `${pinWrapWidth} bottom`,
-          scroller: ".App", //locomotive-scroll
-          scrub: 1,
-          // markers: true,
-        },
-        x: -pinWrapWidth,
 
-        ease: "none",
+      // 📱 MOBILE: Pin vertical + scroll (two-step, mirrors desktop flow)
+      mm.add("(max-width: 48em)", () => {
+        const section = ref.current;
+        const scrollingElement = Horizontalref.current;
+        const totalHeight = scrollingElement.scrollHeight - window.innerHeight;
+        const pinWrapHeight = totalHeight;
+
+        // Ajusta altura do container para permitir o pin (altura total do conteúdo)
+        gsap.set(section, { height: `${scrollingElement.scrollHeight}px` });
+
+        let tMobile = gsap.timeline();
+
+        // 1) pin the section while increasing its height (so page can scroll through)
+        tMobile.to(section, {
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: `+=${pinWrapHeight}`,
+            scroller: ".App",
+            scrub: 1,
+            pin: true,
+            id: "nosso-espaco-pin-mobile-vertical",
+          },
+          height: `${scrollingElement.scrollHeight}px`,
+          ease: "none",
+        });
+
+        // 2) then animate the inner container vertically
+        tMobile.to(scrollingElement, {
+          scrollTrigger: {
+            trigger: scrollingElement,
+            start: "top top",
+            end: `+=${pinWrapHeight}`,
+            scroller: ".App",
+            scrub: 1,
+            id: "nosso-espaco-scroll-mobile-vertical",
+          },
+          y: -pinWrapHeight,
+          ease: "none",
+        });
+
+        return () => {
+          tMobile.kill();
+          ScrollTrigger.getById("nosso-espaco-pin-mobile-vertical")?.kill();
+          ScrollTrigger.getById("nosso-espaco-scroll-mobile-vertical")?.kill();
+          gsap.set(section, { clearProps: "height" });
+          gsap.set(scrollingElement, { clearProps: "transform" });
+        };
       });
       ScrollTrigger.refresh();
     }, 1000);
-    ScrollTrigger.refresh();
 
     return () => {
-      t1.kill();
-      ScrollTrigger.kill();
+      mm.revert();
+      ScrollTrigger.getAll().forEach(st => st.kill());
     };
   }, []);
 
   return (
     <Section ref={ref} id="shop">
       <Left>
-        <SectionTitle data-scroll data-scroll-speed="-1">Nosso Espaço</SectionTitle>
+        <Title data-scroll data-scroll-speed="-1">Nosso Espaço</Title>
         <br /> <br /> <br />
-        <SectionParagraph>
+        <Paragraph>
           O Memorial Garden é o único cemitério modelo parque da região de Ourinhos, 
           projetado para oferecer um ambiente sereno e acolhedor. Nossa estrutura 
           privilegia a harmonia com a natureza, proporcionando um espaço de paz e 
@@ -231,7 +279,7 @@ const Shop = () => {
           dignidade de cada momento, criamos um lugar onde memórias podem ser 
           preservadas com carinho e respeito. Cada detalhe foi pensado para transmitir 
           conforto e serenidade às famílias.
-        </SectionParagraph>
+        </Paragraph>
       </Left>
       <Right data-scroll ref={Horizontalref}>
         <Product img={img1} title="Ambiente" />

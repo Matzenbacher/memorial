@@ -200,97 +200,109 @@ const About = () => {
 
     if (!element || !scrollingElement) return;
 
-    let scrollDistance = 1000; // Fase 1: movimento do vídeo
-    let holdDistance = 900;    // Fase 2: tempo travado
-    let totalDistance = scrollDistance + holdDistance; // 1900px total
-    let movePhaseRatio = scrollDistance / totalDistance; // 0.526 (53%)
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Usar matchMedia para animações responsivas
+    const mm = gsap.matchMedia();
 
     setTimeout(() => {
-      // 🎯 AJUSTADO: Vídeo agora na esquerda, animação da esquerda para direita
-      // Queremos: centro do vídeo em 30% do viewport (dentro do container esquerdo)
-      const recalculate = () => {
-        const viewportWidth = window.innerWidth;
-        const videoCard = scrollingElement.querySelector('.media-item');
-        const videoCardWidth = videoCard?.offsetWidth || 592;
-        
-        // Como o vídeo está no container esquerdo (60% da tela), queremos que o centro
-        // do vídeo fique aproximadamente no meio do container esquerdo
-        // Container esquerdo: 0% a 60% do viewport
-        // Centro do container esquerdo: 60% / 2 = 30%
-        const targetViewportPercent = 0.30; // 30% do viewport
-        
-        // Centro do card deve ficar em targetViewportPercent do viewport
-        const targetPositionPx = viewportWidth * targetViewportPercent;
-        const leftDoCard = targetPositionPx - (videoCardWidth / 2);
-        
-        // Converter para porcentagem do viewport
-        const targetPositionPercent = (leftDoCard / viewportWidth) * 100;
-        
-        return { targetPositionPercent };
-      };
-      
-      let { targetPositionPercent } = recalculate();
-      
-      // ✅ IMPORTANTE: Posicionar vídeo 20% mais próximo para iniciar movimento mais cedo
-      const initialOffset = 0.2; // 20% do progresso já "andado"
-      const initialPosition = -70 + (initialOffset * (targetPositionPercent - (-100)));
-      gsap.set(scrollingElement, { x: `${initialPosition}vw` });
-      
-      // Recalcular em resize
-      window.addEventListener('resize', () => {
-        const result = recalculate();
-        targetPositionPercent = result.targetPositionPercent;
-      });
-      
-      // ScrollTrigger com pin que controla o movimento
-      ScrollTrigger.create({
-        trigger: element,
-        start: "top top", // ← AQUI está o início da animação
-        end: `+=${totalDistance}`, // Total: 1900px (1000 movimento + 900 hold)
-        scroller: ".App",
-        pin: true,
-        scrub: 1,
-        id: "pin-movement",
-        onUpdate: (self) => {
-          let progress = self.progress;
+      // 🖥️ DESKTOP: Animação horizontal complexa (min-width: 48em = 768px)
+      mm.add("(min-width: 48em)", () => {
+        let scrollDistance = 1000; // Fase 1: movimento do vídeo
+        let holdDistance = 900;    // Fase 2: tempo travado
+        let totalDistance = scrollDistance + holdDistance; // 1900px total
+        let movePhaseRatio = scrollDistance / totalDistance; // 0.526 (53%)
+
+        const recalculate = () => {
+          const viewportWidth = window.innerWidth;
+          const videoCard = scrollingElement.querySelector('.media-item');
+          const videoCardWidth = videoCard?.offsetWidth || 592;
           
-          // FASE 1 (0% → ~53%): Vídeo entra da esquerda até posição alvo (30% viewport)
-          if (progress < movePhaseRatio) {
-            let moveProgress = progress / movePhaseRatio; // Normaliza para 0-1
+          const targetViewportPercent = 0.30; // 30% do viewport
+          const targetPositionPx = viewportWidth * targetViewportPercent;
+          const leftDoCard = targetPositionPx - (videoCardWidth / 2);
+          const targetPositionPercent = (leftDoCard / viewportWidth) * 100;
+          
+          return { targetPositionPercent };
+        };
+        
+        let { targetPositionPercent } = recalculate();
+        
+        const initialOffset = 0.2;
+        const initialPosition = -70 + (initialOffset * (targetPositionPercent - (-100)));
+        gsap.set(scrollingElement, { x: `${initialPosition}vw` });
+        
+        window.addEventListener('resize', () => {
+          const result = recalculate();
+          targetPositionPercent = result.targetPositionPercent;
+        });
+        
+        ScrollTrigger.create({
+          trigger: element,
+          start: "top top",
+          end: `+=${totalDistance}`,
+          scroller: ".App",
+          pin: true,
+          scrub: 1,
+          id: "memorial-desktop",
+          onUpdate: (self) => {
+            let progress = self.progress;
             
-            // Ajustar progresso considerando que já começamos 20% adiantado
-            // Quando moveProgress = 0, queremos que o vídeo já esteja 20% do caminho
-            // Então adjustedProgress = moveProgress + initialOffset
-            const adjustedProgress = Math.min(1, moveProgress + initialOffset);
-            
-            // Interpolar da posição inicial até targetPositionPercent
-            const currentPercent = initialPosition + (adjustedProgress * (targetPositionPercent - initialPosition));
-            
-            gsap.set(scrollingElement, { x: `${currentPercent}vw` });
-          } 
-          // FASE 2 (53% → 100%): Vídeo fixo na posição alvo (30% viewport)
-          else {
-            gsap.set(scrollingElement, { x: `${targetPositionPercent}vw` });
+            if (progress < movePhaseRatio) {
+              let moveProgress = progress / movePhaseRatio;
+              const adjustedProgress = Math.min(1, moveProgress + initialOffset);
+              const currentPercent = initialPosition + (adjustedProgress * (targetPositionPercent - initialPosition));
+              gsap.set(scrollingElement, { x: `${currentPercent}vw` });
+            } else {
+              gsap.set(scrollingElement, { x: `${targetPositionPercent}vw` });
+            }
+          },
+          onLeave: () => {
+            if (videoRef.current && !videoRef.current.paused) {
+              videoRef.current.muted = true;
+            }
+          },
+          onEnterBack: () => {
+            if (videoRef.current && !videoRef.current.paused) {
+              videoRef.current.muted = false;
+            }
           }
-        },
-        onLeave: () => {
-          // Quando o end vermelho (fim do pin) passar pelo topo da viewport
-          if (videoRef.current && !videoRef.current.paused) {
-            videoRef.current.muted = true;
-          }
-        },
-        onEnterBack: () => {
-          // Quando voltar para dentro da área do pin
-          if (videoRef.current && !videoRef.current.paused) {
-            videoRef.current.muted = false;
-          }
-        }
+        });
+
+        return () => {
+          ScrollTrigger.getById("memorial-desktop")?.kill();
+        };
       });
-      
+
+      // 📱 MOBILE: Layout vertical simples (max-width: 47.99em)
+      mm.add("(max-width: 47.99em)", () => {
+        // Reset posição para mobile
+        gsap.set(scrollingElement, { x: 0, clearProps: "all" });
+        
+        // Animação simples de fade-in no vídeo
+        gsap.from(scrollingElement, {
+          scrollTrigger: {
+            trigger: element,
+            start: "top 80%",
+            end: "top 20%",
+            scroller: ".App",
+            scrub: 1,
+            id: "memorial-mobile",
+          },
+          opacity: 0,
+          y: 50,
+        });
+
+        return () => {
+          ScrollTrigger.getById("memorial-mobile")?.kill();
+        };
+      });
+
       ScrollTrigger.refresh();
     }, 1000);
 
     return () => {
+      mm.revert(); // Limpa todos os contextos do matchMedia
       ScrollTrigger.getAll().forEach(st => st.kill());
     };
   }, []);
