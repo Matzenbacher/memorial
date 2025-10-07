@@ -66,8 +66,10 @@ export const AbsoluteTitle = styled.h1`
   color: ${(props) => props.theme.primary};
   position: absolute;
   top: 1rem;
-  left: 5%;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 11;
+  text-align: center;
 
   @media (max-width: 64em) {
     font-size: ${(props) => props.theme.fontxl};

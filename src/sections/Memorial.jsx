@@ -369,28 +369,30 @@ const About = () => {
     let movePhaseRatio = scrollDistance / totalDistance; // 0.526 (53%)
 
     setTimeout(() => {
-      // 🎯 SIMPLES: Linha amarela = 30% viewport | Linha azul = centro do vídeo
-      // Queremos: centro do vídeo em 30% do viewport SEMPRE
+      // 🎯 AJUSTADO: Vídeo agora na esquerda, animação da esquerda para direita
+      // Queremos: centro do vídeo em 30% do viewport (dentro do container esquerdo)
       const recalculate = () => {
         const viewportWidth = window.innerWidth;
         const videoCard = scrollingElement.querySelector('.media-item');
         const videoCardWidth = videoCard?.offsetWidth || 592;
         
-        // Linha amarela está SEMPRE em 30% do viewport (em pixels)
-        const linhaAmarelaEmPx = viewportWidth * 0.3;
+        // Como o vídeo está no container esquerdo (65% da tela), queremos que o centro
+        // do vídeo fique aproximadamente no meio do container esquerdo
+        // Container esquerdo: 0% a 65% do viewport
+        // Centro do container esquerdo: 65% / 2 = 32.5%
+        const targetViewportPercent = 0.325; // 32.5% do viewport
         
-        // Centro do card deve ficar em 30% do viewport
-        // Se o card tem left=0 inicialmente, seu centro está em cardWidth/2
-        // Para mover o centro para 30% do viewport:
-        // left do card = 30%viewport - cardWidth/2
-        const leftDoCard = linhaAmarelaEmPx - (videoCardWidth / 2);
+        // Centro do card deve ficar em targetViewportPercent do viewport
+        const targetPositionPx = viewportWidth * targetViewportPercent;
+        const leftDoCard = targetPositionPx - (videoCardWidth / 2);
         
-        // Converter para porcentagem do viewport (não do card!)
+        // Converter para porcentagem do viewport
         const targetPositionPercent = (leftDoCard / viewportWidth) * 100;
         
-        console.log('🎯 Target:', {
+        console.log('🎯 Target ajustado (vídeo na esquerda):', {
           viewport: viewportWidth,
-          linhaAmarela: linhaAmarelaEmPx + 'px (30%)',
+          targetViewportPercent: (targetViewportPercent * 100) + '%',
+          targetPositionPx: targetPositionPx + 'px',
           cardWidth: videoCardWidth,
           leftDoCard: leftDoCard + 'px',
           targetPercent: targetPositionPercent.toFixed(2) + '% do viewport'
@@ -425,20 +427,20 @@ const About = () => {
         onUpdate: (self) => {
           let progress = self.progress;
           
-          // FASE 1 (0% → ~53%): Vídeo entra da esquerda até linha azul tocar linha amarela
+          // FASE 1 (0% → ~53%): Vídeo entra da esquerda até posição alvo (32.5% viewport)
           if (progress < movePhaseRatio) {
             let moveProgress = progress / movePhaseRatio; // Normaliza para 0-1
             
             // Começar de fora da tela (left = -cardWidth = -100vw aproximadamente)
             const startPercent = -100; // -100% do viewport (completamente fora à esquerda)
             
-            // Interpolar de -100vw até targetPositionPercent (30% - cardWidth/2)
+            // Interpolar de -100vw até targetPositionPercent (32.5% - cardWidth/2)
             const currentPercent = startPercent + (moveProgress * (targetPositionPercent - startPercent));
             
             gsap.set(scrollingElement, { x: `${currentPercent}vw` });
             console.log(`📍 FASE 1: progress=${(progress*100).toFixed(1)}% | moveProgress=${(moveProgress*100).toFixed(1)}% | x=${currentPercent.toFixed(1)}vw`);
           } 
-          // FASE 2 (53% → 100%): Vídeo fixo com linha azul na linha amarela (30%)
+          // FASE 2 (53% → 100%): Vídeo fixo na posição alvo (32.5% viewport)
           else {
             gsap.set(scrollingElement, { x: `${targetPositionPercent}vw` });
             console.log(`📍 FASE 2: progress=${(progress*100).toFixed(1)}% | x=${targetPositionPercent.toFixed(1)}vw (TRAVADO)`);
@@ -474,6 +476,14 @@ const About = () => {
         {/* <DivisorLine1 /> */}
         {/* <DivisorLine2 /> */}
         {/* <CenterLine /> */}
+        <VideoContainer ref={Horizontalref}>
+          <Media 
+            ref={videoRef}
+            type="video" 
+            src="/videos/video-institucional.mp4" 
+            title=""
+          />
+        </VideoContainer>
         <TextContainer>
           <SectionTitle>O Memorial</SectionTitle>
           <SectionParagraph>
@@ -486,14 +496,6 @@ const About = () => {
             um espaço de paz e tranquilidade para as famílias.
           </SectionParagraph>
         </TextContainer>
-        <VideoContainer ref={Horizontalref}>
-          <Media 
-            ref={videoRef}
-            type="video" 
-            src="/videos/video-institucional.mp4" 
-            title=""
-          />
-        </VideoContainer>
       </ContentWrapper>
     </Section>
   );

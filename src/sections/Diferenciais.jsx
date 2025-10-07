@@ -3,12 +3,36 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import React, { useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { AbsoluteTitle } from '../styles/SharedComponents';
 
 import img1 from '../assets/Images/11.webp';
 import img2 from '../assets/Images/12.webp';
 import img3 from '../assets/Images/13.webp';
 import img4 from '../assets/Images/14.webp';
+
+const Title = styled.h1`
+  font-size: ${(props) => props.theme.fontxxl};
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: ${(props) => props.theme.primary};
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  z-index: 11;
+  text-align: center;
+  white-space: nowrap;
+  
+  /* Locomotive Scroll aplica transform, então usamos margin para centralizar */
+  margin-left: -50%;
+  width: 100%;
+
+  @media (max-width: 64em) {
+    font-size: ${(props) => props.theme.fontxl};
+  }
+  
+  @media (max-width: 48em) {
+    font-size: ${(props) => props.theme.fontlg};
+  }
+`;
 
 const Section = styled(motion.section)`
   min-height: 100vh;
@@ -22,6 +46,10 @@ const Section = styled(motion.section)`
   align-items: center;
   position: relative;
   background: ${(props) => props.theme.body};
+  padding-top: 5rem;
+  
+  /* Espaçamento extra para evitar conflito com pin anterior */
+  //margin-top: 2rem;
   
   /* Linha vermelha no centro do viewport (50%) - DEBUG */
   &::before {
@@ -54,6 +82,7 @@ const CardsContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   position: relative;
+  gap: 2.5rem; /* Espaçamento entre cards */
   
   /* Linha azul no centro do container dos cards - DEBUG */
   &::after {
@@ -78,8 +107,13 @@ const CardsContainer = styled.div`
     }
   }
 
+  @media (max-width: 64em) {
+    gap: 2rem;
+  }
+
   @media (max-width: 48em) {
     padding: 6rem 0 3rem 0;
+    gap: 1.5rem;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
@@ -99,12 +133,15 @@ const CardsContainer = styled.div`
       border-radius: 10px;
     }
   }
+  
+  @media (max-width: 30em) {
+    gap: 1rem;
+  }
 `;
 
 const Card = styled(motion.div)`
   display: inline-block;
   width: 20rem;
-  margin-right: 2.5rem;
   flex-shrink: 0;
   background: #FFFFFF;
   border-radius: 20px;
@@ -119,17 +156,14 @@ const Card = styled(motion.div)`
 
   @media (max-width: 64em) {
     width: 18rem;
-    margin-right: 2rem;
   }
 
   @media (max-width: 48em) {
     width: 15rem;
-    margin-right: 1.5rem;
   }
   
   @media (max-width: 30em) {
     width: 12rem;
-    margin-right: 1rem;
   }
 `;
 
@@ -241,10 +275,7 @@ const NewArrival = () => {
 
     if (!element || !scrollingElement) return;
 
-    let scrollDistance = 1000; // Fase 1: movimento dos cards
-    let holdDistance = 900;    // Fase 2: tempo travado
-    let totalDistance = scrollDistance + holdDistance; // 1900px total
-    let movePhaseRatio = scrollDistance / totalDistance; // 0.526 (53%)
+    let pinDuration = 1500; // Reduzido de 2000 para 1500 para evitar conflito
 
     setTimeout(() => {
       // Verificar se é mobile (desabilita animação GSAP)
@@ -255,32 +286,34 @@ const NewArrival = () => {
         return; // Não criar ScrollTrigger em mobile
       }
       
-      // 🎯 Centro dos 4 cards (linha azul) deve alinhar com 50% viewport (linha vermelha)
+      // 🎯 SIMPLES: Linha vermelha = 50% viewport | Linha azul = centro do container
+      // Queremos: centro do container em 50% do viewport SEMPRE
       const recalculate = () => {
         const viewportWidth = window.innerWidth;
-        const containerWidth = scrollingElement.scrollWidth; // largura total dos 4 cards
+        const containerWidth = scrollingElement.offsetWidth;
         
-        // Linha vermelha: 50% do viewport
+        // Linha vermelha está SEMPRE em 50% do viewport (em pixels)
         const linhaVermelhaEmPx = viewportWidth * 0.5;
         
-        // Linha azul: centro do container = containerWidth / 2
-        const centroContainerOffset = containerWidth / 2;
+        // Centro do container deve ficar em 50% do viewport
+        // Se o container tem left=0 inicialmente, seu centro está em containerWidth/2
+        // Para mover o centro para 50% do viewport:
+        // left do container = 50%viewport - containerWidth/2
+        const leftDoContainer = linhaVermelhaEmPx - (containerWidth / 2);
         
-        // Para alinhar: posição do container + centro do container = linha vermelha
-        // containerX + centroContainerOffset = linhaVermelhaEmPx
-        // containerX = linhaVermelhaEmPx - centroContainerOffset
-        const deslocamentoNecessario = linhaVermelhaEmPx - centroContainerOffset;
+        // 🔧 AJUSTE: Mover mais para a esquerda (valores negativos = esquerda)
+        const ajusteEsquerda = -140; // -50px para a esquerda
         
-        // Converter para porcentagem do viewport (para usar vw)
-        const targetPositionPercent = (deslocamentoNecessario / viewportWidth) * 100;
+        // Converter para porcentagem do viewport (não do container!)
+        const targetPositionPercent = ((leftDoContainer + ajusteEsquerda) / viewportWidth) * 100;
         
-        console.log('🎯 NewArrival Alinhamento:', {
+        console.log('🎯 Diferenciais - Posições calculadas:', {
           viewport: viewportWidth + 'px',
           linhaVermelha: linhaVermelhaEmPx + 'px (50% viewport)',
           containerWidth: containerWidth + 'px',
-          linhaAzul: centroContainerOffset + 'px (50% container)',
-          deslocamento: deslocamentoNecessario + 'px',
-          targetPercent: targetPositionPercent.toFixed(2) + 'vw'
+          leftDoContainer: leftDoContainer + 'px',
+          ajusteEsquerda: ajusteEsquerda + 'px',
+          targetPercent: targetPositionPercent.toFixed(2) + '% do viewport'
         });
         
         return { targetPositionPercent };
@@ -288,52 +321,41 @@ const NewArrival = () => {
       
       let { targetPositionPercent } = recalculate();
       
-      // ✅ IMPORTANTE: Posicionar cards fora da tela (direita) ANTES de criar o ScrollTrigger
-      // Calcular quanto precisa estar fora da tela à direita
-      const startPositionPercent = 100; // começar em 100vw (fora à direita)
-      
-      gsap.set(scrollingElement, { x: `${startPositionPercent}vw` });
-      console.log('✅ Cards posicionados em', startPositionPercent, 'vw (fora da tela à direita)');
-      console.log('🎯 Vão para:', targetPositionPercent.toFixed(2), 'vw (centro)');
+      // ✅ IMPORTANTE: Posicionar cards fora da tela (100vw) ANTES de criar o ScrollTrigger
+      gsap.set(scrollingElement, { x: '100vw' });
+      console.log('✅ Cards posicionados em 100vw (fora da tela à direita)');
+      console.log('🎯 Vão para:', targetPositionPercent.toFixed(2), 'vw (centro alinhado)');
       
       // Recalcular em resize
       window.addEventListener('resize', () => {
         const result = recalculate();
         targetPositionPercent = result.targetPositionPercent;
-        console.log('Recalculated NewArrival target position:', targetPositionPercent, '%');
+        console.log('♻️ Recalculado target position:', targetPositionPercent.toFixed(2), 'vw');
       });
       
-      // ScrollTrigger com pin que controla o movimento
+      // ScrollTrigger: anima continuamente de 100vw até targetPositionPercent
       ScrollTrigger.create({
         trigger: element,
-        start: "top top",
-        end: `+=${totalDistance}`, // Total: 1900px (1000 movimento + 900 hold)
+        start: "top top", // Mudou de "top-=300 top" para "top top"
+        end: `+=${pinDuration}`,
         scroller: ".App",
         pin: true,
         scrub: 1,
         markers: { startColor: "green", endColor: "red", fontSize: "18px", fontWeight: "bold", indent: 20 },
-        id: "pin-newarrival",
+        id: "pin-diferenciais",
         onUpdate: (self) => {
-          let progress = self.progress;
+          let progress = self.progress; // 0 → 1
           
-          // FASE 1 (0% → ~53%): Cards entram da direita até linha azul alinhar com linha vermelha
-          if (progress < movePhaseRatio) {
-            let moveProgress = progress / movePhaseRatio; // Normaliza para 0-1
-            
-            // Começar de fora da tela à direita (100vw)
-            const startPercent = 100;
-            
-            // Interpolar de 100vw (direita) até targetPositionPercent (centro)
-            // Fórmula: start + (moveProgress × (target - start))
-            const currentPercent = startPercent + (moveProgress * (targetPositionPercent - startPercent));
-            
-            gsap.set(scrollingElement, { x: `${currentPercent}vw` });
-            console.log(`📍 FASE 1: progress=${(progress*100).toFixed(1)}% | moveProgress=${(moveProgress*100).toFixed(1)}% | x=${currentPercent.toFixed(1)}vw | target=${targetPositionPercent.toFixed(1)}vw`);
-          } 
-          // FASE 2 (53% → 100%): Cards travados - linha azul alinhada com linha vermelha (50%)
-          else {
-            gsap.set(scrollingElement, { x: `${targetPositionPercent}vw` });
-            console.log(`📍 FASE 2: progress=${(progress*100).toFixed(1)}% | x=${targetPositionPercent.toFixed(1)}vw (TRAVADO - ALINHADO)`);
+          // Começar de fora da tela (right = 100vw)
+          const startPercent = 100;
+          
+          // Interpolar de 100vw até targetPositionPercent
+          const currentPercent = startPercent + (progress * (targetPositionPercent - startPercent));
+          
+          gsap.set(scrollingElement, { x: `${currentPercent}vw` });
+          
+          if (progress === 0 || progress === 1 || Math.abs(progress - 0.5) < 0.01) {
+            console.log(`📍 progress=${(progress*100).toFixed(1)}% | x=${currentPercent.toFixed(2)}vw | target=${targetPositionPercent.toFixed(2)}vw`);
           }
         }
       });
@@ -348,11 +370,11 @@ const NewArrival = () => {
 
   return (
     <Section ref={ref} id="fixed-target" className="new-arrival">
-      <AbsoluteTitle data-scroll data-scroll-speed="-2">
+      <Title data-scroll data-scroll-speed="-2">
         Diferenciais
-      </AbsoluteTitle>
+      </Title>
 
-      <CardsContainer data-scroll ref={horizontalRef}>
+      <CardsContainer ref={horizontalRef}>
         {differentials.map((item, index) => (
           <DifferentialCard
             key={index}

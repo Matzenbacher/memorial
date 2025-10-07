@@ -7,11 +7,11 @@ import { ThemeProvider } from "styled-components";
 
 import Loader from "./components/Loader";
 import ScrollTriggerProxy from "./components/ScrollTriggerProxy";
-import About from "./sections/About";
+import Memorial from "./sections/Memorial";
 import Footer from "./sections/Footer";
 import Home from "./sections/Home";
-import NewArrival from "./sections/NewArrival";
-import Shop from "./sections/Shop";
+import Diferenciais from "./sections/Diferenciais";
+import NossoEspaco from "./sections/NossoEspaco";
 import GlobalStyles from "./styles/GlobalStyles";
 import { dark } from "./styles/Themes";
 
@@ -57,10 +57,10 @@ function App() {
               {Loaded ? null : <Loader />}
 
               <Home key="home" />
-              <Shop key="Shop" />
-              <About key="about" />
-              <NewArrival key="new arrival" />
-              <Footer key="Footer" />
+              <NossoEspaco key="nosso-espaco" />
+              <Memorial key="memorial" />
+              <Diferenciais key="diferenciais" />
+              <Footer key="footer" />
             </AnimatePresence>
           </main>
         </LocomotiveScrollProvider>
