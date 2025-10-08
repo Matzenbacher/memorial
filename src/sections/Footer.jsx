@@ -121,6 +121,11 @@ const Bottom = styled.div`
     }
   }
 
+  /* make the bottom spans slightly smaller (20% reduction) */
+  span {
+    font-size: 0.8em;
+  }
+
   @media (max-width: 48em) {
     font-size: ${(props) => props.theme.fontmd};
     margin: 0 1rem;

@@ -46,7 +46,7 @@ const Section = styled(motion.section)`
   align-items: center;
   position: relative;
   background: ${(props) => props.theme.body};
-  padding-top: 5rem;
+  padding-top: 2.5rem;
 `;
 
 const CardsContainer = styled.div`
