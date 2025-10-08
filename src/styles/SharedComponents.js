@@ -38,7 +38,7 @@ export const SectionParagraph = styled.p`
   width: 80%;
   margin: 0 auto;
   line-height: 1.6;
-  text-align: justify;
+  text-align: auto;
 
   @media (max-width: 64em) {
     font-size: ${(props) => props.theme.fontmd};
@@ -65,7 +65,7 @@ export const AbsoluteTitle = styled.h1`
   font-weight: 700;
   color: ${(props) => props.theme.primary};
   position: absolute;
-  top: 1rem;
+  top: 3rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 11;

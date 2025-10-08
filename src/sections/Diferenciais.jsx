@@ -62,28 +62,7 @@ const CardsContainer = styled.div`
     gap: 2rem;
   }
 
-  @media (max-width: 48em) {
-    padding: 6rem 0 3rem 0;
-    gap: 1.5rem;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    
-    &::-webkit-scrollbar {
-      height: 8px;
-    }
-    
-    &::-webkit-scrollbar-track {
-      background: ${(props) => props.theme.grey};
-      border-radius: 10px;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background: ${(props) => props.theme.primary};
-      border-radius: 10px;
-    }
-  }
+  /* Force desktop: keep desktop spacing and no native scroll on small screens */
   
   @media (max-width: 30em) {
     gap: 1rem;
@@ -105,17 +84,7 @@ const Card = styled(motion.div)`
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   }
 
-  @media (max-width: 64em) {
-    width: 18rem;
-  }
-
-  @media (max-width: 48em) {
-    width: 15rem;
-  }
-  
-  @media (max-width: 30em) {
-    width: 12rem;
-  }
+  /* keep desktop card sizes on all viewports */
 `;
 
 const ImageWrapper = styled.div`
@@ -135,9 +104,7 @@ const ImageWrapper = styled.div`
     transform: scale(1.1);
   }
 
-  @media (max-width: 48em) {
-    height: 220px;
-  }
+  /* keep desktop image wrapper height on all viewports */
 `;
 
 const CardContent = styled.div`
@@ -160,17 +127,7 @@ const CardContent = styled.div`
     line-height: 1.6;
   }
 
-  @media (max-width: 48em) {
-    padding: 1.5rem;
-    
-    h2 {
-      font-size: ${(props) => props.theme.fontmd};
-    }
-    
-    p {
-      font-size: ${(props) => props.theme.fontsm};
-    }
-  }
+  /* keep desktop card content styles on all viewports */
 `;
 
 const differentials = [
@@ -231,78 +188,54 @@ const NewArrival = () => {
     let totalDistance = scrollDistance + holdDistance; // Total do pin
     let movePhaseRatio = scrollDistance / totalDistance;
 
+    // Use same two-step pin + horizontal timeline as other sections
     setTimeout(() => {
-      // Verificar se é mobile (desabilita animação GSAP)
-      const isMobile = window.innerWidth <= 768;
-      
-      if (isMobile) {
-        return; // Não criar ScrollTrigger em mobile
-      }
-      
-      // Queremos: centro do container em 50% do viewport SEMPRE
-      const recalculate = () => {
-        const viewportWidth = window.innerWidth;
-        const containerWidth = scrollingElement.offsetWidth;
-        
-        // Centro do container deve ficar em 50% do viewport
-        // Se o container tem left=0 inicialmente, seu centro está em containerWidth/2
-        // Para mover o centro para 50% do viewport:
-        // left do container = 50%viewport - containerWidth/2
-        const leftDoContainer = viewportWidth * 0.5 - (containerWidth / 2);
-        
-        // Ajuste para mover mais para a esquerda
-        const ajusteEsquerda = -140;
-        
-        // Converter para porcentagem do viewport
-        const targetPositionPercent = ((leftDoContainer + ajusteEsquerda) / viewportWidth) * 100;
-        
-        return { targetPositionPercent };
-      };
-      
-      let { targetPositionPercent } = recalculate();
-      
-      // Posicionar cards fora da tela antes de criar o ScrollTrigger
-      gsap.set(scrollingElement, { x: '100vw' });
-      
-      // Recalcular em resize
-      window.addEventListener('resize', () => {
-        const result = recalculate();
-        targetPositionPercent = result.targetPositionPercent;
+  // width used to determine pin scroll length
+  let pinWrapWidth = scrollingElement.offsetWidth;
+
+  // start the cards a bit more to the right (15% of viewport)
+  const startOffsetPx = Math.round(window.innerWidth * 0.85);
+  gsap.set(scrollingElement, { x: startOffsetPx });
+
+      let t1 = gsap.timeline();
+
+      // 1) pin the section for the width of the inner container
+      t1.to(element, {
+        scrollTrigger: {
+          trigger: element,
+          start: "top top",
+          end: `+=${pinWrapWidth}`,
+          scroller: ".App",
+          scrub: 1,
+          pin: true,
+          id: "pin-diferenciais",
+        },
+        // set section height so the page can scroll through the horizontal content
+        height: `${scrollingElement.scrollWidth}px`,
+        ease: "none",
       });
-      
-      // ScrollTrigger: anima continuamente de 100vw até targetPositionPercent
-      ScrollTrigger.create({
-        trigger: element,
-        start: "top top",
-        end: `+=${totalDistance}`,
-        scroller: ".App",
-        pin: true,
-        scrub: 1,
-        id: "pin-diferenciais",
-        onUpdate: (self) => {
-          let progress = self.progress; // 0 → 1
-          
-          // FASE 1 (0% → ~60%): Cards entram da direita até posição alvo (centro)
-          if (progress < movePhaseRatio) {
-            let moveProgress = progress / movePhaseRatio; // Normaliza para 0-1
-            
-            // Interpolar de 100vw até targetPositionPercent
-            const currentPercent = 100 + (moveProgress * (targetPositionPercent - 100));
-            
-            gsap.set(scrollingElement, { x: `${currentPercent}vw` });
-          } 
-          // FASE 2 (60% → 100%): Cards fixos no centro
-          else {
-            gsap.set(scrollingElement, { x: `${targetPositionPercent}vw` });
-          }
-        }
+
+      // 2) while pinned, animate the inner container horizontally
+      t1.to(scrollingElement, {
+        scrollTrigger: {
+          trigger: scrollingElement,
+          start: "top top",
+          end: `+=${pinWrapWidth}`,
+          scroller: ".App",
+          scrub: 1,
+          id: "pin-diferenciais-scroll",
+        },
+        x: -pinWrapWidth,
+        ease: "none",
       });
-      
+
       ScrollTrigger.refresh();
     }, 1000);
 
     return () => {
+      // Kill any ScrollTriggers and timelines created
       ScrollTrigger.getAll().forEach(st => st.kill());
+      gsap.killTweensOf(scrollingElement);
     };
   }, []);
 

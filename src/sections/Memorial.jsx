@@ -14,9 +14,7 @@ const Section = styled(motion.section)`
   display: flex;
   background-color: ${(props) => props.theme.grey};
   
-  @media (max-width: 48em) {
-    flex-direction: column;
-  }
+  /* force desktop layout: no mobile column stacking */
 `;
 
 const ContentWrapper = styled.div`
@@ -29,11 +27,7 @@ const ContentWrapper = styled.div`
   overflow: hidden;
   box-sizing: border-box;
   
-  @media (max-width: 48em) {
-    position: relative;
-    height: auto;
-    flex-direction: column;
-  }
+  /* force desktop layout: keep fixed positioning on all viewports */
 `;
 
 const TextContainer = styled.div`
@@ -52,20 +46,7 @@ const TextContainer = styled.div`
   align-items: flex-start;
   padding: 2rem;
 
-  @media (max-width: 64em) {
-    width: 45%; /* Ajustado para 45% em tablet */
-  }
-
-  @media (max-width: 48em) {
-    width: 100%;
-    position: relative;
-    min-height: auto;
-    padding: 3rem 2rem;
-  }
-  
-  @media (max-width: 30em) {
-    padding: 2rem 1rem;
-  }
+  /* keep desktop TextContainer styles on all viewports */
 `;
 
 const VideoContainer = styled.div`
@@ -80,15 +61,7 @@ const VideoContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   
-  @media (max-width: 48em) {
-    width: 100%;
-    min-height: 60vh;
-    height: auto;
-    
-    &::before {
-      display: none;
-    }
-  }
+  /* keep desktop VideoContainer styles on all viewports */
 `;
 
 const Item = styled(motion.div)`
@@ -120,45 +93,7 @@ const Item = styled(motion.div)`
     font-size: ${(props) => props.theme.fontlg};
   }
 
-  @media (max-width: 64em) {
-    width: 32rem;
-    margin-left: 4rem;
-    
-    video, iframe {
-      height: 22rem;
-    }
-    
-    h1 {
-      font-size: ${(props) => props.theme.fontmd};
-    }
-  }
-
-  @media (max-width: 48em) {
-    width: 25rem;
-    margin-left: 3rem;
-    
-    video, iframe {
-      height: 20rem;
-    }
-    
-    h1 {
-      font-size: ${(props) => props.theme.fontsm};
-    }
-  }
-  
-  @media (max-width: 30em) {
-    width: 20rem;
-    margin-left: 2rem;
-    
-    video, iframe {
-      height: 16rem;
-    }
-    
-    h1 {
-      font-size: ${(props) => props.theme.fontxs};
-      margin-top: 0.5rem;
-    }
-  }
+  /* keep desktop Item styles on all viewports */
 `;
 
 const Media = React.forwardRef(({ type, src, title = "" }, ref) => {
@@ -202,107 +137,73 @@ const About = () => {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Usar matchMedia para animações responsivas
-    const mm = gsap.matchMedia();
-
+    // Force desktop animation for all viewports
     setTimeout(() => {
-      // 🖥️ DESKTOP: Animação horizontal complexa (min-width: 48em = 768px)
-      mm.add("(min-width: 48em)", () => {
-        let scrollDistance = 1000; // Fase 1: movimento do vídeo
-        let holdDistance = 900;    // Fase 2: tempo travado
-        let totalDistance = scrollDistance + holdDistance; // 1900px total
-        let movePhaseRatio = scrollDistance / totalDistance; // 0.526 (53%)
+      let scrollDistance = 1000; // Fase 1: movimento do vídeo
+      let holdDistance = 900;    // Fase 2: tempo travado
+      let totalDistance = scrollDistance + holdDistance; // 1900px total
+      let movePhaseRatio = scrollDistance / totalDistance; // 0.526 (53%)
 
-        const recalculate = () => {
-          const viewportWidth = window.innerWidth;
-          const videoCard = scrollingElement.querySelector('.media-item');
-          const videoCardWidth = videoCard?.offsetWidth || 592;
-          
-          const targetViewportPercent = 0.30; // 30% do viewport
-          const targetPositionPx = viewportWidth * targetViewportPercent;
-          const leftDoCard = targetPositionPx - (videoCardWidth / 2);
-          const targetPositionPercent = (leftDoCard / viewportWidth) * 100;
-          
-          return { targetPositionPercent };
-        };
+      const recalculate = () => {
+        const viewportWidth = window.innerWidth;
+        const videoCard = scrollingElement.querySelector('.media-item');
+        const videoCardWidth = videoCard?.offsetWidth || 592;
         
-        let { targetPositionPercent } = recalculate();
+        const targetViewportPercent = 0.30; // 30% do viewport
+        const targetPositionPx = viewportWidth * targetViewportPercent;
+        const leftDoCard = targetPositionPx - (videoCardWidth / 2);
+        const targetPositionPercent = (leftDoCard / viewportWidth) * 100;
         
-        const initialOffset = 0.2;
-        const initialPosition = -70 + (initialOffset * (targetPositionPercent - (-100)));
-        gsap.set(scrollingElement, { x: `${initialPosition}vw` });
-        
-        window.addEventListener('resize', () => {
-          const result = recalculate();
-          targetPositionPercent = result.targetPositionPercent;
-        });
-        
-        ScrollTrigger.create({
-          trigger: element,
-          start: "top top",
-          end: `+=${totalDistance}`,
-          scroller: ".App",
-          pin: true,
-          scrub: 1,
-          id: "memorial-desktop",
-          onUpdate: (self) => {
-            let progress = self.progress;
-            
-            if (progress < movePhaseRatio) {
-              let moveProgress = progress / movePhaseRatio;
-              const adjustedProgress = Math.min(1, moveProgress + initialOffset);
-              const currentPercent = initialPosition + (adjustedProgress * (targetPositionPercent - initialPosition));
-              gsap.set(scrollingElement, { x: `${currentPercent}vw` });
-            } else {
-              gsap.set(scrollingElement, { x: `${targetPositionPercent}vw` });
-            }
-          },
-          onLeave: () => {
-            if (videoRef.current && !videoRef.current.paused) {
-              videoRef.current.muted = true;
-            }
-          },
-          onEnterBack: () => {
-            if (videoRef.current && !videoRef.current.paused) {
-              videoRef.current.muted = false;
-            }
-          }
-        });
-
-        return () => {
-          ScrollTrigger.getById("memorial-desktop")?.kill();
-        };
+        return { targetPositionPercent };
+      };
+      
+      let { targetPositionPercent } = recalculate();
+      
+      const initialOffset = 0.2;
+      const initialPosition = -70 + (initialOffset * (targetPositionPercent - (-100)));
+      gsap.set(scrollingElement, { x: `${initialPosition}vw` });
+      
+      window.addEventListener('resize', () => {
+        const result = recalculate();
+        targetPositionPercent = result.targetPositionPercent;
       });
-
-      // 📱 MOBILE: Layout vertical simples (max-width: 47.99em)
-      mm.add("(max-width: 47.99em)", () => {
-        // Reset posição para mobile
-        gsap.set(scrollingElement, { x: 0, clearProps: "all" });
-        
-        // Animação simples de fade-in no vídeo
-        gsap.from(scrollingElement, {
-          scrollTrigger: {
-            trigger: element,
-            start: "top 80%",
-            end: "top 20%",
-            scroller: ".App",
-            scrub: 1,
-            id: "memorial-mobile",
-          },
-          opacity: 0,
-          y: 50,
-        });
-
-        return () => {
-          ScrollTrigger.getById("memorial-mobile")?.kill();
-        };
+      
+      ScrollTrigger.create({
+        trigger: element,
+        start: "top top",
+        end: `+=${totalDistance}`,
+        scroller: ".App",
+        pin: true,
+        scrub: 1,
+        id: "memorial-desktop",
+        onUpdate: (self) => {
+          let progress = self.progress;
+          
+          if (progress < movePhaseRatio) {
+            let moveProgress = progress / movePhaseRatio;
+            const adjustedProgress = Math.min(1, moveProgress + initialOffset);
+            const currentPercent = initialPosition + (adjustedProgress * (targetPositionPercent - initialPosition));
+            gsap.set(scrollingElement, { x: `${currentPercent}vw` });
+          } else {
+            gsap.set(scrollingElement, { x: `${targetPositionPercent}vw` });
+          }
+        },
+        onLeave: () => {
+          if (videoRef.current && !videoRef.current.paused) {
+            videoRef.current.muted = true;
+          }
+        },
+        onEnterBack: () => {
+          if (videoRef.current && !videoRef.current.paused) {
+            videoRef.current.muted = false;
+          }
+        }
       });
 
       ScrollTrigger.refresh();
     }, 1000);
 
     return () => {
-      mm.revert(); // Limpa todos os contextos do matchMedia
       ScrollTrigger.getAll().forEach(st => st.kill());
     };
   }, []);

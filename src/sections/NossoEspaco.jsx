@@ -18,34 +18,22 @@ import img10 from "../assets/Images/10.webp";
 import img11 from "../assets/Images/11.webp";
 import img12 from "../assets/Images/12.webp";
 
-// SectionTitle & SectionParagraph overrides for this section on mobile
-const Title = styled(SectionTitle)`
-  @media (max-width: 48em) {
-    font-size: ${(props) => props.theme.fontxxl};
-  }
-`;
-const Paragraph = styled(SectionParagraph)`
-  @media (max-width: 48em) {
-    width: 90%;
-    margin: 0 auto;
-    text-align: center;
-  }
-`;
+// Use desktop title & paragraph styles (force desktop layout)
+const Title = styled(SectionTitle)``;
+const Paragraph = styled(SectionParagraph)``;
 
 const Section = styled(motion.section)`
   min-height: 100vh;
   height: auto;
   width: 100%;
-  margin: 0 auto;
+  margin: -5 auto;
   overflow: hidden;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   position: relative;
 
-  @media (max-width: 48em) {
-    flex-direction: column;  // empilha Left e Right verticalmente
-  }
+  /* force desktop layout: no mobile column stacking */
   background-color: ${(props) => props.theme.grey};
 `;
 
@@ -64,19 +52,11 @@ const Left = styled.div`
   justify-content: center;
   align-items: flex-start;
   padding: 2rem;
+  /* shift up 2rem from perfect center */
+  transform: translateY(-2rem);
 
     
-  @media (max-width: 48em) {
-    width: 100%;
-    position: relative;
-    min-height: auto;
-    padding: 3rem 2rem;
-    text-align: center;
-  }
-
-  @media (max-width: 30em) {
-    padding: 2rem 1rem;
-  }
+  /* keep desktop Left styles on all viewports */
 `;
 const Right = styled.div`
   position: absolute;
@@ -89,18 +69,7 @@ const Right = styled.div`
   justify-content: flex-start;
   align-items: center;
   
-  @media (max-width: 48em) {
-    position: relative;
-    left: 0;
-    padding: 2rem;
-    width: 100%;
-    min-height: auto;
-    display: flex;
-    flex-direction: column;  // empilha itens verticalmente
-    align-items: center;
-    overflow: hidden; // esconde overflow
-    gap: 2rem;      // espaçamento vertical
-  }
+  /* keep desktop Right styles on all viewports */
 `;
 
 const Item = styled(motion.div)`
@@ -127,12 +96,7 @@ const Item = styled(motion.div)`
 
 
 
-  @media (max-width: 30em) {
-    h1 {
-      font-size: ${(props) => props.theme.fontsm};
-      margin-top: 0.5rem;
-    }
-  }
+  /* keep desktop Item styles on all viewports */
 `;
 const Product = ({ img, title = "" }) => {
   return (
@@ -152,8 +116,8 @@ const Product = ({ img, title = "" }) => {
 const Shop = () => {
   gsap.registerPlugin(ScrollTrigger);
   const ref = useRef(null);
-
   const Horizontalref = useRef(null);
+  const titleRef = useRef(null);
 
   useLayoutEffect(() => {
     let element = ref.current;
@@ -163,103 +127,62 @@ const Shop = () => {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    const mm = gsap.matchMedia();
-
+    // Force desktop behavior for all viewports: animate title first, then two-step timeline (pin then horizontal scroll)
     setTimeout(() => {
-      // 🖥️ DESKTOP: Scroll horizontal (min-width: 48em = 768px)
-      mm.add("(min-width: 48em)", () => {
-        let pinWrapWidth = scrollingElement.offsetWidth;
-        let t1 = gsap.timeline();
-
-        t1.to(element, {
+      // animate title down a bit before carousel pins
+      if (titleRef.current) {
+        gsap.set(titleRef.current, { y: -60, opacity: 0 });
+        gsap.to(titleRef.current, {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: element,
-            start: "top top",
-            end: `+=${pinWrapWidth}`,
+            // start earlier so the title drops before the carousel pins
+            start: "top 95%",
+            end: "top 75%",
             scroller: ".App",
-            scrub: 1,
-            pin: true,
-            id: "nosso-espaco-pin-desktop",
+            id: "nosso-espaco-title",
+            toggleActions: "play none none reverse",
           },
-          height: `${scrollingElement.scrollWidth}px`,
-          ease: "none",
         });
+      }
 
-        t1.to(scrollingElement, {
-          scrollTrigger: {
-            trigger: scrollingElement,
-            start: "top top",
-            end: `+=${pinWrapWidth}`,
-            scroller: ".App",
-            scrub: 1,
-            id: "nosso-espaco-scroll-desktop",
-          },
-          x: -pinWrapWidth,
-          ease: "none",
-        });
+      let pinWrapWidth = scrollingElement.offsetWidth;
+      let t1 = gsap.timeline();
 
-        return () => {
-          t1.kill();
-          ScrollTrigger.getById("nosso-espaco-pin-desktop")?.kill();
-          ScrollTrigger.getById("nosso-espaco-scroll-desktop")?.kill();
-        };
+      t1.to(element, {
+        scrollTrigger: {
+          trigger: element,
+          start: "top top",
+          end: `+=${pinWrapWidth}`,
+          scroller: ".App",
+          scrub: 1,
+          pin: true,
+          id: "nosso-espaco-pin-desktop",
+        },
+        height: `${scrollingElement.scrollWidth}px`,
+        ease: "none",
       });
 
-
-      // 📱 MOBILE: Pin vertical + scroll (two-step, mirrors desktop flow)
-      mm.add("(max-width: 48em)", () => {
-        const section = ref.current;
-        const scrollingElement = Horizontalref.current;
-        const totalHeight = scrollingElement.scrollHeight - window.innerHeight;
-        const pinWrapHeight = totalHeight;
-
-        // Ajusta altura do container para permitir o pin (altura total do conteúdo)
-        gsap.set(section, { height: `${scrollingElement.scrollHeight}px` });
-
-        let tMobile = gsap.timeline();
-
-        // 1) pin the section while increasing its height (so page can scroll through)
-        tMobile.to(section, {
-          scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: `+=${pinWrapHeight}`,
-            scroller: ".App",
-            scrub: 1,
-            pin: true,
-            id: "nosso-espaco-pin-mobile-vertical",
-          },
-          height: `${scrollingElement.scrollHeight}px`,
-          ease: "none",
-        });
-
-        // 2) then animate the inner container vertically
-        tMobile.to(scrollingElement, {
-          scrollTrigger: {
-            trigger: scrollingElement,
-            start: "top top",
-            end: `+=${pinWrapHeight}`,
-            scroller: ".App",
-            scrub: 1,
-            id: "nosso-espaco-scroll-mobile-vertical",
-          },
-          y: -pinWrapHeight,
-          ease: "none",
-        });
-
-        return () => {
-          tMobile.kill();
-          ScrollTrigger.getById("nosso-espaco-pin-mobile-vertical")?.kill();
-          ScrollTrigger.getById("nosso-espaco-scroll-mobile-vertical")?.kill();
-          gsap.set(section, { clearProps: "height" });
-          gsap.set(scrollingElement, { clearProps: "transform" });
-        };
+      t1.to(scrollingElement, {
+        scrollTrigger: {
+          trigger: scrollingElement,
+          start: "top top",
+          end: `+=${pinWrapWidth}`,
+          scroller: ".App",
+          scrub: 1,
+          id: "nosso-espaco-scroll-desktop",
+        },
+        x: -pinWrapWidth,
+        ease: "none",
       });
+
       ScrollTrigger.refresh();
     }, 1000);
 
     return () => {
-      mm.revert();
       ScrollTrigger.getAll().forEach(st => st.kill());
     };
   }, []);
@@ -267,7 +190,7 @@ const Shop = () => {
   return (
     <Section ref={ref} id="shop">
       <Left>
-        <Title data-scroll data-scroll-speed="-1">Nosso Espaço</Title>
+        <Title ref={titleRef} data-scroll data-scroll-speed="-1">Nosso Espaço</Title>
         <br /> <br /> <br />
         <Paragraph>
           O Memorial Garden é o único cemitério modelo parque da região de Ourinhos, 
